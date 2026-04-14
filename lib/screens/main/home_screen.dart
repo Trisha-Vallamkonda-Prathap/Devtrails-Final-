@@ -1170,7 +1170,7 @@ class _PremiumTrustCard extends StatelessWidget {
                         context,
                         CupertinoPageRoute<void>(
                           builder: (_) =>
-                              const CityPickerScreen(isFromOnboarding: false),
+                              const CityPickerScreen(isOnboarding: false),
                         ),
                       );
                     },

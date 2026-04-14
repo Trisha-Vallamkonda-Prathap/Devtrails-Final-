@@ -1,605 +1,902 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:gigshield/config.dart';
-import 'package:gigshield/providers/worker_provider.dart';
-import 'package:gigshield/services/risk_engine.dart';
-import 'package:gigshield/theme/app_colors.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
-class ZoneMapScreen extends StatefulWidget {
-  final String cityName;
-  final bool isFromOnboarding;
+import '../../config.dart';
+import '../../providers/location_provider.dart';
+import '../../providers/worker_provider.dart';
+import '../../services/location_service.dart';
+import '../../theme/app_colors.dart';
+import '../../theme/app_theme.dart';
 
+class ZoneMapScreen extends StatefulWidget {
   const ZoneMapScreen({
     super.key,
     required this.cityName,
-    this.isFromOnboarding = false,
+    required this.isOnboarding,
   });
+
+  final String cityName;
+  final bool isOnboarding;
 
   @override
   State<ZoneMapScreen> createState() => _ZoneMapScreenState();
 }
 
-class _ZoneMapScreenState extends State<ZoneMapScreen> {
-  GoogleMapController? _mapController;
-  int? _selectedZoneIndex;
-  bool _showListView = false;
+class _ZoneMapScreenState extends State<ZoneMapScreen>
+    with TickerProviderStateMixin {
+  final MapController _mapController = MapController();
+  final LocationService _locationService = LocationService();
+  final TextEditingController _searchCtrl = TextEditingController();
 
-  String get _resolvedCityKey {
-    if (_cityZones.containsKey(widget.cityName)) {
-      return widget.cityName;
-    }
-    final normalized = widget.cityName.trim().toLowerCase();
-    for (final key in _cityZones.keys) {
-      if (key.toLowerCase() == normalized) {
-        return key;
-      }
-    }
-    return 'Bengaluru';
-  }
+  LatLng? _userLatLng;
+  double? _userAccuracy;
+  Map<String, dynamic>? _selectedZone;
+  bool _locating = false;
+  bool _showSpoofWarning = false;
+  String? _spoofReason;
+  String? _zoneWarning;
+  String _searchQuery = '';
 
-  static const Map<String, LatLng> _cityCentres = {
+  late AnimationController _pulseCtrl;
+  late Animation<double> _pulseAnim;
+
+  static const Map<String, LatLng> _cityCenter = {
     'Mumbai': LatLng(19.0760, 72.8777),
     'Bengaluru': LatLng(12.9716, 77.5946),
     'Hyderabad': LatLng(17.3850, 78.4867),
     'Chennai': LatLng(13.0827, 80.2707),
     'Delhi': LatLng(28.6139, 77.2090),
     'Pune': LatLng(18.5204, 73.8567),
-    'Kolkata': LatLng(22.5726, 88.3639),
-    'Ahmedabad': LatLng(23.0225, 72.5714),
   };
 
-  static const Map<String, List<Map<String, dynamic>>> _cityZones = {
-    'Mumbai': [
-      {'zone': 'Kurla', 'city': 'Mumbai', 'tier': 'high', 'premium': 115.0, 'coverage': 2460.0, 'lat': 19.0728, 'lng': 72.8826},
-      {'zone': 'Dharavi', 'city': 'Mumbai', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 19.0437, 'lng': 72.8540},
-      {'zone': 'Bandra', 'city': 'Mumbai', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 19.0544, 'lng': 72.8402},
-      {'zone': 'Andheri', 'city': 'Mumbai', 'tier': 'low', 'premium': 60.0, 'coverage': 2000.0, 'lat': 19.1136, 'lng': 72.8697},
-      {'zone': 'Dadar', 'city': 'Mumbai', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 19.0178, 'lng': 72.8478},
-    ],
-    'Bengaluru': [
-      {'zone': 'Hebbal', 'city': 'Bengaluru', 'tier': 'high', 'premium': 120.0, 'coverage': 2500.0, 'lat': 13.0450, 'lng': 77.5965},
-      {'zone': 'Koramangala', 'city': 'Bengaluru', 'tier': 'high', 'premium': 120.0, 'coverage': 2500.0, 'lat': 12.9352, 'lng': 77.6245},
-      {'zone': 'Indiranagar', 'city': 'Bengaluru', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 12.9784, 'lng': 77.6408},
-      {'zone': 'Whitefield', 'city': 'Bengaluru', 'tier': 'low', 'premium': 60.0, 'coverage': 2000.0, 'lat': 12.9698, 'lng': 77.7499},
-      {'zone': 'HSR Layout', 'city': 'Bengaluru', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 12.9116, 'lng': 77.6370},
-    ],
-    'Hyderabad': [
-      {'zone': 'Secunderabad', 'city': 'Hyderabad', 'tier': 'medium', 'premium': 85.0, 'coverage': 2240.0, 'lat': 17.4399, 'lng': 78.4983},
-      {'zone': 'Banjara Hills', 'city': 'Hyderabad', 'tier': 'low', 'premium': 60.0, 'coverage': 2000.0, 'lat': 17.4156, 'lng': 78.4347},
-      {'zone': 'HITEC City', 'city': 'Hyderabad', 'tier': 'low', 'premium': 60.0, 'coverage': 2000.0, 'lat': 17.4435, 'lng': 78.3772},
-      {'zone': 'Kukatpally', 'city': 'Hyderabad', 'tier': 'medium', 'premium': 85.0, 'coverage': 2240.0, 'lat': 17.4849, 'lng': 78.3995},
-    ],
-    'Chennai': [
-      {'zone': 'Tambaram', 'city': 'Chennai', 'tier': 'low', 'premium': 60.0, 'coverage': 2000.0, 'lat': 12.9249, 'lng': 80.1000},
-      {'zone': 'Guindy', 'city': 'Chennai', 'tier': 'low', 'premium': 60.0, 'coverage': 2000.0, 'lat': 13.0067, 'lng': 80.2206},
-      {'zone': 'Anna Nagar', 'city': 'Chennai', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 13.0850, 'lng': 80.2101},
-      {'zone': 'Velachery', 'city': 'Chennai', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 12.9815, 'lng': 80.2180},
-    ],
-    'Delhi': [
-      {'zone': 'Dwarka', 'city': 'Delhi', 'tier': 'low', 'premium': 60.0, 'coverage': 2000.0, 'lat': 28.5921, 'lng': 77.0460},
-      {'zone': 'Rohini', 'city': 'Delhi', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 28.7383, 'lng': 77.0822},
-      {'zone': 'Karol Bagh', 'city': 'Delhi', 'tier': 'high', 'premium': 120.0, 'coverage': 2500.0, 'lat': 28.6518, 'lng': 77.1909},
-      {'zone': 'Saket', 'city': 'Delhi', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 28.5245, 'lng': 77.2066},
-    ],
-    'Pune': [
-      {'zone': 'Kothrud', 'city': 'Pune', 'tier': 'low', 'premium': 60.0, 'coverage': 2000.0, 'lat': 18.5074, 'lng': 73.8077},
-      {'zone': 'Hinjawadi', 'city': 'Pune', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 18.5912, 'lng': 73.7389},
-      {'zone': 'Shivajinagar', 'city': 'Pune', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 18.5308, 'lng': 73.8474},
-      {'zone': 'Hadapsar', 'city': 'Pune', 'tier': 'high', 'premium': 120.0, 'coverage': 2500.0, 'lat': 18.5089, 'lng': 73.9260},
-    ],
-    'Kolkata': [
-      {'zone': 'Salt Lake', 'city': 'Kolkata', 'tier': 'low', 'premium': 60.0, 'coverage': 2000.0, 'lat': 22.5867, 'lng': 88.4173},
-      {'zone': 'Park Street', 'city': 'Kolkata', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 22.5535, 'lng': 88.3521},
-      {'zone': 'Howrah', 'city': 'Kolkata', 'tier': 'high', 'premium': 120.0, 'coverage': 2500.0, 'lat': 22.5958, 'lng': 88.2636},
-      {'zone': 'Garia', 'city': 'Kolkata', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 22.4594, 'lng': 88.3913},
-    ],
-    'Ahmedabad': [
-      {'zone': 'Navrangpura', 'city': 'Ahmedabad', 'tier': 'low', 'premium': 60.0, 'coverage': 2000.0, 'lat': 23.0375, 'lng': 72.5601},
-      {'zone': 'Maninagar', 'city': 'Ahmedabad', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 22.9951, 'lng': 72.6040},
-      {'zone': 'Bopal', 'city': 'Ahmedabad', 'tier': 'medium', 'premium': 90.0, 'coverage': 2240.0, 'lat': 23.0326, 'lng': 72.4636},
-      {'zone': 'Naroda', 'city': 'Ahmedabad', 'tier': 'high', 'premium': 120.0, 'coverage': 2500.0, 'lat': 23.0701, 'lng': 72.6738},
-    ],
-  };
+  List<Map<String, dynamic>> get _allZones {
+    final fromConfig = kZones
+        .where((z) => z['city_key'] == widget.cityName)
+        .cast<Map<String, dynamic>>()
+        .toList();
+    if (fromConfig.isNotEmpty) return fromConfig;
+    final center =
+        _cityCenter[widget.cityName] ?? const LatLng(19.0760, 72.8777);
+    return [
+      {
+        'zone': 'Central ${widget.cityName}',
+        'city': widget.cityName,
+        'tier': 'medium',
+        'premium': 90.0,
+        'coverage': 2240.0,
+        'lat': center.latitude,
+        'lng': center.longitude
+      },
+      {
+        'zone': 'North ${widget.cityName}',
+        'city': widget.cityName,
+        'tier': 'high',
+        'premium': 120.0,
+        'coverage': 2500.0,
+        'lat': center.latitude + 0.03,
+        'lng': center.longitude
+      },
+      {
+        'zone': 'South ${widget.cityName}',
+        'city': widget.cityName,
+        'tier': 'low',
+        'premium': 60.0,
+        'coverage': 2000.0,
+        'lat': center.latitude - 0.03,
+        'lng': center.longitude
+      },
+    ];
+  }
 
-  List<Map<String, dynamic>> get _zones => _cityZones[_resolvedCityKey] ?? const [];
+  List<Map<String, dynamic>> get _filteredZones {
+    if (_searchQuery.isEmpty) return _allZones;
+    return _allZones
+        .where((z) => (z['zone'] as String)
+            .toLowerCase()
+            .contains(_searchQuery.toLowerCase()))
+        .toList();
+  }
 
-  LatLng get _centre =>
-      _cityCentres[_resolvedCityKey] ?? const LatLng(12.9716, 77.5946);
+  LatLng get _center =>
+      _cityCenter[widget.cityName] ?? const LatLng(19.0760, 72.8777);
 
   @override
   void initState() {
     super.initState();
-    if (_zones.isEmpty) {
-      return;
-    }
-
-    _selectedZoneIndex = 0;
-
-    if (widget.isFromOnboarding) {
-      return;
-    }
-
-    final worker = Provider.of<WorkerProvider>(context, listen: false).worker;
-    if (worker == null || worker.city.toLowerCase() != _resolvedCityKey.toLowerCase()) {
-      return;
-    }
-    final index = _zones.indexWhere((z) => z['zone'] == worker.zone);
-    if (index >= 0) {
-      _selectedZoneIndex = index;
-    }
-  }
-
-  Set<Marker> get _markers {
-    return _zones.asMap().entries.map((entry) {
-      final i = entry.key;
-      final z = entry.value;
-      final tier = (kCityTiers[z['city'] as String] ?? z['tier']) as String;
-
-      final hue = tier == 'high'
-          ? BitmapDescriptor.hueOrange
-          : tier == 'medium'
-              ? BitmapDescriptor.hueAzure
-              : BitmapDescriptor.hueGreen;
-
-      return Marker(
-        markerId: MarkerId('zone_$i'),
-        position: LatLng(z['lat'] as double, z['lng'] as double),
-        icon: BitmapDescriptor.defaultMarkerWithHue(hue),
-        infoWindow: InfoWindow(
-          title: z['zone'] as String,
-          snippet: '${tier.toUpperCase()} RISK · ₹${(z['premium'] as double).toInt()}/week',
-        ),
-        onTap: () => setState(() => _selectedZoneIndex = i),
-      );
-    }).toSet();
-  }
-
-  void _focusZone(int index) {
-    if (index < 0 || index >= _zones.length) {
-      return;
-    }
-    final zone = _zones[index];
-    setState(() => _selectedZoneIndex = index);
-    _mapController?.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: LatLng(zone['lat'] as double, zone['lng'] as double),
-          zoom: 13.8,
-        ),
-      ),
+    _pulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+    _pulseAnim = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut),
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => _locateMe());
+  }
+
+  @override
+  void dispose() {
+    _pulseCtrl.dispose();
+    _mapController.dispose();
+    _searchCtrl.dispose();
+    _locationService.dispose();
+    super.dispose();
+  }
+
+  Future<void> _locateMe() async {
+    setState(() {
+      _locating = true;
+      _showSpoofWarning = false;
+      _zoneWarning = null;
+    });
+
+    final result = await _locationService.getCurrentLocation();
+
+    if (!mounted) return;
+
+    if (result.isSpoofDetected) {
+      setState(() {
+        _locating = false;
+        _showSpoofWarning = true;
+        _spoofReason = result.errorMessage;
+      });
+      return;
+    }
+
+    if (result.isError) {
+      setState(() => _locating = false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.errorMessage ?? 'Could not get location'),
+        backgroundColor: AppColors.danger,
+        behavior: SnackBarBehavior.floating,
+      ));
+      return;
+    }
+
+    final pos = LatLng(result.lat!, result.lng!);
+    setState(() {
+      _userLatLng = pos;
+      _userAccuracy = result.accuracy;
+      _locating = false;
+    });
+
+    _mapController.move(pos, 14.5);
+    _autoSelectNearest(pos);
+  }
+
+  void _autoSelectNearest(LatLng pos) {
+    Map<String, dynamic>? nearest;
+    double min = double.infinity;
+    for (final z in _allZones) {
+      final d = Geolocator.distanceBetween(
+        pos.latitude,
+        pos.longitude,
+        z['lat'] as double,
+        z['lng'] as double,
+      );
+      if (d < min) {
+        min = d;
+        nearest = z;
+      }
+    }
+    if (nearest != null) setState(() => _selectedZone = nearest);
+  }
+
+  Future<void> _onZoneTap(Map<String, dynamic> zone) async {
+    setState(() {
+      _selectedZone = zone;
+      _zoneWarning = null;
+    });
+
+    if (_userLatLng != null) {
+      final warning =
+          await context.read<LocationProvider>().validateZoneSelection(
+                zone['zone'] as String,
+                _userLatLng!.latitude,
+                _userLatLng!.longitude,
+              );
+      if (mounted && warning != null) {
+        setState(() => _zoneWarning = warning);
+      }
+    }
+  }
+
+  Future<void> _confirmZone(Map<String, dynamic> zone) async {
+    if (widget.isOnboarding) {
+      Navigator.pop(context, zone);
+      return;
+    }
+
+    final wp = context.read<WorkerProvider>();
+    final worker = wp.worker;
+    if (worker == null) return;
+    await wp.setWorker(worker.copyWith(
+      zone: zone['zone'] as String,
+      city: zone['city'] as String,
+    ));
+    if (!mounted) return;
+    Navigator.pop(context, zone);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Zone updated to ${zone['zone']}'),
+      backgroundColor: AppColors.success,
+      behavior: SnackBarBehavior.floating,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_zones.isEmpty) {
-      return Scaffold(
-        backgroundColor: AppColors.darkBg,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: Text(
-            widget.cityName,
-            style: const TextStyle(color: Colors.white),
-          ),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.location_off, color: Colors.white54, size: 48),
-              const SizedBox(height: 16),
-              Text(
-                'No zones available for ${widget.cityName}',
-                style: const TextStyle(color: Colors.white70, fontSize: 15),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Coming soon',
-                style: TextStyle(color: Colors.white38, fontSize: 12),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    final selectedZone =
-        _selectedZoneIndex != null ? _zones[_selectedZoneIndex!] : null;
-
+    final topPad = MediaQuery.of(context).padding.top;
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
       body: Stack(
         children: [
-          Visibility(
-            visible: !_showListView,
-            child: GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: _centre,
-                zoom: 12.5,
-              ),
-              markers: _markers,
-              onMapCreated: (c) => _mapController = c,
-              mapType: MapType.normal,
-              myLocationButtonEnabled: false,
-              zoomControlsEnabled: false,
+          FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              initialCenter: _center,
+              initialZoom: 12.5,
+              onTap: (_, point) => _onMapTap(point),
             ),
-          ),
-          Visibility(
-            visible: _showListView,
-            child: _buildListView(),
-          ),
-          if (_zones.isEmpty)
-            Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.35),
-                alignment: Alignment.center,
-                child: const Text(
-                  'No zones configured for this city yet',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.example.gigshield',
+                maxZoom: 19,
+              ),
+              CircleLayer(circles: _buildCircles()),
+              MarkerLayer(markers: _buildMarkers()),
+              if (_userLatLng != null) ...[
+                CircleLayer(circles: [
+                  CircleMarker(
+                    point: _userLatLng!,
+                    radius: _userAccuracy ?? 50,
+                    useRadiusInMeter: true,
+                    color: AppColors.info.withValues(alpha: 0.12),
+                    borderColor: AppColors.info.withValues(alpha: 0.5),
+                    borderStrokeWidth: 1,
                   ),
-                ),
-              ),
-            ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.fromLTRB(
-                16,
-                MediaQuery.of(context).padding.top + 8,
-                16,
-                16,
-              ),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF0D1F24), Colors.transparent],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.5),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                        size: 20,
+                ]),
+                MarkerLayer(markers: [
+                  Marker(
+                    point: _userLatLng!,
+                    width: 20,
+                    height: 20,
+                    child: AnimatedBuilder(
+                      animation: _pulseAnim,
+                      builder: (_, __) => Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.info,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.info
+                                  .withValues(alpha: _pulseAnim.value * 0.6),
+                              blurRadius: 12,
+                              spreadRadius: 3,
+                            ),
+                          ],
+                        ),
+                        child: const Icon(Icons.circle,
+                            color: Colors.white, size: 10),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.cityName,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Text(
-                        'Tap a zone to select',
-                        style: TextStyle(fontSize: 12, color: Colors.white70),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ]),
+              ],
+            ],
+          ),
+          Positioned(
+            top: topPad + 8,
+            left: 12,
+            right: 12,
+            child: _TopBar(
+              searchCtrl: _searchCtrl,
+              cityName: widget.cityName,
+              onSearch: (q) => setState(() => _searchQuery = q),
+              onBack: () => Navigator.pop(context),
+              searchResults: _searchQuery.isNotEmpty ? _filteredZones : [],
+              onResultTap: (zone) {
+                _searchCtrl.clear();
+                setState(() => _searchQuery = '');
+                _onZoneTap(zone);
+                _mapController.move(
+                    LatLng(zone['lat'] as double, zone['lng'] as double), 14.0);
+              },
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).padding.top + 72,
+            top: topPad + 70,
             right: 12,
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.7),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _legendItem(AppColors.warning, 'High risk'),
-                  const SizedBox(height: 4),
-                  _legendItem(AppColors.info, 'Medium risk'),
-                  const SizedBox(height: 4),
-                  _legendItem(AppColors.success, 'Low risk'),
-                ],
-              ),
+            child: _RiskLegend(),
+          ),
+          Positioned(
+            right: 12,
+            bottom: _selectedZone != null ? 240 : 24,
+            child: _LocateFab(
+              loading: _locating,
+              pulseAnim: _pulseAnim,
+              onTap: _locateMe,
             ),
           ),
-          if (_zones.isNotEmpty)
+          if (_userLatLng != null && !_locating)
             Positioned(
-              left: 0,
-              right: 0,
-              bottom: selectedZone != null ? 210 : 8,
-              child: SafeArea(
-                top: false,
-                child: SizedBox(
-                  height: 54,
-                  child: ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _zones.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 8),
-                    itemBuilder: (context, index) {
-                      final zone = _zones[index];
-                      final cityTier = (kCityTiers[zone['city'] as String] ?? zone['tier']) as String;
-                      final tierColor = AppColors.tierColor(cityTier);
-                      final isSelected = _selectedZoneIndex == index;
-                      return ChoiceChip(
-                        label: Text(zone['zone'] as String),
-                        selected: isSelected,
-                        onSelected: (_) => _focusZone(index),
-                        selectedColor: tierColor.withValues(alpha: 0.22),
-                        backgroundColor: Colors.black.withValues(alpha: 0.55),
-                        side: BorderSide(
-                          color: isSelected ? tierColor : Colors.white24,
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                          fontSize: 12,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+              right: 12,
+              bottom: _selectedZone != null ? 300 : 84,
+              child: _AccuracyBadge(accuracy: _userAccuracy ?? 0),
+            ),
+          if (_showSpoofWarning)
+            Positioned(
+              left: 12,
+              right: 12,
+              bottom: 16,
+              child: _SpoofBanner(
+                reason: _spoofReason ?? '',
+                onDismiss: () => setState(() => _showSpoofWarning = false),
               ),
             ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
-            bottom: selectedZone != null ? 0 : -220,
             left: 0,
             right: 0,
-            child: _buildZoneCard(selectedZone),
+            bottom: _selectedZone != null && !_showSpoofWarning ? 0 : -320,
+            child: _selectedZone == null
+                ? const SizedBox.shrink()
+                : _ZoneCard(
+                    zone: _selectedZone!,
+                    userLatLng: _userLatLng,
+                    warning: _zoneWarning,
+                    onSelect: () => _confirmZone(_selectedZone!),
+                    onDismiss: () => setState(() => _selectedZone = null),
+                  ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _showListView = !_showListView;
-          });
-        },
-        child: Icon(_showListView ? Icons.map : Icons.list),
-      ),
     );
   }
 
-  Widget _buildListView() {
-    return ListView.builder(
-      itemCount: _zones.length,
-      itemBuilder: (context, index) {
-        final zone = _zones[index];
-        final tier = (kCityTiers[zone['city'] as String] ?? zone['tier']) as String;
-        final tierColor = AppColors.tierColor(tier);
-        return ListTile(
-          title: Text(zone['zone'] as String),
-          subtitle: Text(
-              '${tier.toUpperCase()} RISK · ₹${(zone['premium'] as double).toInt()}/week'),
-          tileColor: _selectedZoneIndex == index ? tierColor.withOpacity(0.2) : null,
-          onTap: () {
-            setState(() {
-              _selectedZoneIndex = index;
-              _showListView = false;
-            });
-            _focusZone(index);
-          },
-        );
-      },
-    );
-  }
-
-  Widget _legendItem(Color color, String label) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 10,
-          height: 10,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+  List<Marker> _buildMarkers() {
+    return _allZones.map<Marker>((zone) {
+      final tier = zone['tier'] as String;
+      final color = tier == 'high'
+          ? AppColors.danger
+          : tier == 'medium'
+              ? AppColors.warning
+              : AppColors.success;
+      final isSelected = _selectedZone?['zone'] == zone['zone'];
+      return Marker(
+        point: LatLng(zone['lat'] as double, zone['lng'] as double),
+        width: isSelected ? 44 : 36,
+        height: isSelected ? 44 : 36,
+        child: GestureDetector(
+          onTap: () => _onZoneTap(zone),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isSelected ? color : color.withValues(alpha: 0.85),
+              border:
+                  Border.all(color: Colors.white, width: isSelected ? 3 : 2),
+              boxShadow: [
+                BoxShadow(
+                  color: color.withValues(alpha: isSelected ? 0.5 : 0.2),
+                  blurRadius: isSelected ? 12 : 4,
+                ),
+              ],
+            ),
+            child: Icon(Icons.location_on,
+                color: Colors.white, size: isSelected ? 22 : 18),
+          ),
         ),
-        const SizedBox(width: 6),
-        Text(label, style: const TextStyle(fontSize: 10, color: Colors.white)),
+      );
+    }).toList();
+  }
+
+  List<CircleMarker> _buildCircles() {
+    return _allZones.map((zone) {
+      final tier = zone['tier'] as String;
+      final color = tier == 'high'
+          ? AppColors.danger
+          : tier == 'medium'
+              ? AppColors.warning
+              : AppColors.success;
+      return CircleMarker(
+        point: LatLng(zone['lat'] as double, zone['lng'] as double),
+        radius: 1200,
+        useRadiusInMeter: true,
+        color: color.withValues(alpha: 0.07),
+        borderColor: color.withValues(alpha: 0.25),
+        borderStrokeWidth: 1,
+      );
+    }).toList();
+  }
+
+  void _onMapTap(LatLng point) {
+    Map<String, dynamic>? nearest;
+    double min = double.infinity;
+    for (final z in _allZones) {
+      final d = Geolocator.distanceBetween(
+        point.latitude,
+        point.longitude,
+        z['lat'] as double,
+        z['lng'] as double,
+      );
+      if (d < min && d < 3000) {
+        min = d;
+        nearest = z;
+      }
+    }
+    if (nearest != null) _onZoneTap(nearest);
+  }
+}
+
+class _TopBar extends StatelessWidget {
+  const _TopBar({
+    required this.searchCtrl,
+    required this.cityName,
+    required this.onSearch,
+    required this.onBack,
+    required this.searchResults,
+    required this.onResultTap,
+  });
+
+  final TextEditingController searchCtrl;
+  final String cityName;
+  final ValueChanged<String> onSearch;
+  final VoidCallback onBack;
+  final List<Map<String, dynamic>> searchResults;
+  final ValueChanged<Map<String, dynamic>> onResultTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            GestureDetector(
+              onTap: onBack,
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: kCardShadow,
+                ),
+                child: const Icon(Icons.arrow_back,
+                    color: AppColors.textPrimary, size: 20),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Container(
+                height: 44,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: kCardShadow,
+                ),
+                child: TextField(
+                  controller: searchCtrl,
+                  onChanged: onSearch,
+                  decoration: InputDecoration(
+                    hintText: 'Search zones in $cityName',
+                    hintStyle: const TextStyle(
+                        fontSize: 13, color: AppColors.textSoft),
+                    prefixIcon: const Icon(Icons.search,
+                        color: AppColors.textSoft, size: 18),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    suffixIcon: searchCtrl.text.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.close,
+                                size: 16, color: AppColors.textSoft),
+                            onPressed: () {
+                              searchCtrl.clear();
+                              onSearch('');
+                            },
+                          )
+                        : null,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (searchResults.isNotEmpty)
+          Container(
+            margin: const EdgeInsets.only(top: 4, left: 54),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: kCardShadow,
+            ),
+            child: Column(
+              children: searchResults.take(5).map((z) {
+                final tier = z['tier'] as String;
+                final color = AppColors.tierColor(tier);
+                return ListTile(
+                  dense: true,
+                  leading: Container(
+                    width: 8,
+                    height: 8,
+                    decoration:
+                        BoxDecoration(color: color, shape: BoxShape.circle),
+                  ),
+                  title: Text(z['zone'] as String,
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.w600)),
+                  subtitle: Text(
+                      '${tier.toUpperCase()} · ₹${(z['premium'] as double).toInt()}/wk',
+                      style: const TextStyle(fontSize: 10)),
+                  onTap: () => onResultTap(z),
+                );
+              }).toList(),
+            ),
+          ),
       ],
     );
   }
+}
 
-  Widget _buildZoneCard(Map<String, dynamic>? zone) {
-    if (zone == null) return const SizedBox.shrink();
-    final cityTier = (kCityTiers[zone['city'] as String] ?? zone['tier']) as String;
-    final tier = cityTier;
+class _RiskLegend extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: kCardShadow,
+      ),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _LRow(color: AppColors.danger, label: 'High risk'),
+          SizedBox(height: 4),
+          _LRow(color: AppColors.warning, label: 'Medium risk'),
+          SizedBox(height: 4),
+          _LRow(color: AppColors.success, label: 'Low risk'),
+        ],
+      ),
+    );
+  }
+}
+
+class _LRow extends StatelessWidget {
+  const _LRow({required this.color, required this.label});
+  final Color color;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+          const SizedBox(width: 6),
+          Text(label,
+              style: const TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600)),
+        ],
+      );
+}
+
+class _LocateFab extends StatelessWidget {
+  const _LocateFab({
+    required this.loading,
+    required this.pulseAnim,
+    required this.onTap,
+  });
+
+  final bool loading;
+  final Animation<double> pulseAnim;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: pulseAnim,
+      builder: (_, __) => GestureDetector(
+        onTap: loading ? null : onTap,
+        child: Container(
+          width: 52,
+          height: 52,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary
+                    .withValues(alpha: loading ? pulseAnim.value * 0.5 : 0.2),
+                blurRadius: loading ? 18 : 8,
+                spreadRadius: loading ? 3 : 0,
+              ),
+            ],
+          ),
+          child: loading
+              ? const Padding(
+                  padding: EdgeInsets.all(14),
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: AppColors.primary),
+                )
+              : const Icon(Icons.my_location,
+                  color: AppColors.primary, size: 22),
+        ),
+      ),
+    );
+  }
+}
+
+class _AccuracyBadge extends StatelessWidget {
+  const _AccuracyBadge({required this.accuracy});
+  final double accuracy;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = accuracy < 30
+        ? AppColors.success
+        : accuracy < 80
+            ? AppColors.warning
+            : AppColors.danger;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: kCardShadow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.gps_fixed, size: 10, color: color),
+          const SizedBox(width: 4),
+          Text('±${accuracy.toInt()}m',
+              style: TextStyle(
+                  fontSize: 10, fontWeight: FontWeight.w700, color: color)),
+        ],
+      ),
+    );
+  }
+}
+
+class _SpoofBanner extends StatelessWidget {
+  const _SpoofBanner({required this.reason, required this.onDismiss});
+  final String reason;
+  final VoidCallback onDismiss;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1C0A0A),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.danger.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.gpp_bad, color: AppColors.danger, size: 22),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Location Verification Failed',
+                    style: TextStyle(
+                        color: AppColors.danger,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700)),
+                const SizedBox(height: 3),
+                Text(reason,
+                    style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.7),
+                        fontSize: 11,
+                        height: 1.4)),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.white54, size: 16),
+            onPressed: onDismiss,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ZoneCard extends StatelessWidget {
+  const _ZoneCard({
+    required this.zone,
+    required this.userLatLng,
+    required this.warning,
+    required this.onSelect,
+    required this.onDismiss,
+  });
+  final Map<String, dynamic> zone;
+  final LatLng? userLatLng;
+  final String? warning;
+  final VoidCallback onSelect;
+  final VoidCallback onDismiss;
+
+  String? _distLabel() {
+    if (userLatLng == null) return null;
+    final d = Geolocator.distanceBetween(
+      userLatLng!.latitude,
+      userLatLng!.longitude,
+      zone['lat'] as double,
+      zone['lng'] as double,
+    );
+    return d < 1000
+        ? '${d.toInt()}m away'
+        : '${(d / 1000).toStringAsFixed(1)}km away';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tier = zone['tier'] as String;
     final tierColor = AppColors.tierColor(tier);
 
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        boxShadow: kCardShadow,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  '${zone['zone']}, ${zone['city']}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: tierColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: tierColor.withValues(alpha: 0.4)),
-                ),
-                child: Text(
-                  '${tier.toUpperCase()} RISK',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: tierColor,
-                  ),
-                ),
-              ),
-            ],
+          Container(
+            width: 36,
+            height: 4,
+            margin: const EdgeInsets.only(top: 12),
+            decoration: BoxDecoration(
+              color: AppColors.divider,
+              borderRadius: BorderRadius.circular(2),
+            ),
           ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _infoCell(
-                  'Weekly Premium',
-                  '₹${(zone['premium'] as double).toInt()}',
-                ),
-              ),
-              Container(width: 1, height: 40, color: AppColors.divider),
-              Expanded(
-                child: _infoCell(
-                  'Coverage Limit',
-                  '₹${(zone['coverage'] as double).toInt()}',
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: Material(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.transparent,
-              child: Ink(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primaryMid, AppColors.primaryLight],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: InkWell(
-                  onTap: () => _selectZone(zone),
-                  borderRadius: BorderRadius.circular(12),
-                  child: const Center(
-                    child: Text(
-                      'Select this zone →',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(zone['zone'] as String,
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w800)),
+                          if (_distLabel() != null)
+                            Row(children: [
+                              const Icon(Icons.near_me,
+                                  size: 11, color: AppColors.textSoft),
+                              const SizedBox(width: 3),
+                              Text(_distLabel()!,
+                                  style: const TextStyle(
+                                      fontSize: 11, color: AppColors.textSoft)),
+                            ]),
+                        ],
                       ),
                     ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: tierColor.withValues(alpha: 0.1),
+                        border: Border.all(
+                            color: tierColor.withValues(alpha: 0.45)),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Text('${tier.toUpperCase()} RISK',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: tierColor)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                        child: _InfoCol(
+                            'Weekly Premium',
+                            '₹${(zone['premium'] as double).toInt()}',
+                            AppColors.primary)),
+                    Container(width: 1, height: 40, color: AppColors.divider),
+                    Expanded(
+                        child: _InfoCol(
+                            'Coverage',
+                            '₹${(zone['coverage'] as double).toInt()}',
+                            AppColors.success)),
+                  ],
+                ),
+                if (warning != null) ...[
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppColors.warning.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: AppColors.warning.withValues(alpha: 0.3)),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.info_outline,
+                            size: 14, color: AppColors.warning),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(warning!,
+                              style: const TextStyle(
+                                  fontSize: 11,
+                                  color: AppColors.warning,
+                                  height: 1.4)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 14),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: onSelect,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                    ),
+                    child: const Text('Select this zone',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w700)),
                   ),
                 ),
-              ),
+                const SizedBox(height: 14),
+              ],
             ),
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _infoCell(String label, String value) {
-    return Column(
-      children: [
-        Text(label, style: const TextStyle(fontSize: 11, color: AppColors.textSoft)),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ],
-    );
-  }
+class _InfoCol extends StatelessWidget {
+  const _InfoCol(this.label, this.value, this.color);
+  final String label;
+  final String value;
+  final Color color;
 
-  void _selectZone(Map<String, dynamic> zone) {
-    final cityName = zone['city'] as String;
-    final tier = RiskEngine.getTier(
-      zone['zone'] as String,
-      city: cityName,
-    );
-    final premium = RiskEngine.getPremium(tier, city: cityName);
-    final coverage = RiskEngine.getCoverageLimit(tier, city: cityName);
-
-    if (widget.isFromOnboarding) {
-      Navigator.pop(
-        context,
-        {
-          ...zone,
-          'tier': tier.name,
-          'premium': premium,
-          'coverage': coverage,
-        },
+  @override
+  Widget build(BuildContext context) => Column(
+        children: [
+          Text(label,
+              style: const TextStyle(fontSize: 10, color: AppColors.textSoft)),
+          const SizedBox(height: 4),
+          Text(value,
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.w800, color: color)),
+        ],
       );
-      return;
-    }
-
-    final messenger = ScaffoldMessenger.of(context);
-
-    final workerProvider = Provider.of<WorkerProvider>(context, listen: false);
-    final current = workerProvider.worker;
-    if (current != null) {
-      workerProvider.setWorker(
-        current.copyWith(
-          zone: zone['zone'] as String,
-          city: cityName,
-          tier: tier,
-        ),
-      );
-    }
-
-    Navigator.pop(context);
-    Navigator.pop(context);
-
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text('Zone updated to ${zone['zone']}'),
-        backgroundColor: AppColors.primary,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
 }

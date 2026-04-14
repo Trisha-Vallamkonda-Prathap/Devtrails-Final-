@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../config.dart';
@@ -32,16 +33,16 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
     }
   }
 
-  Map<String, LatLng> get _centerMap => {
-        'Mumbai': const LatLng(19.0760, 72.8777),
-        'Bengaluru': const LatLng(12.9716, 77.5946),
-        'Hyderabad': const LatLng(17.3850, 78.4867),
-        'Chennai': const LatLng(13.0827, 80.2707),
-        'Delhi': const LatLng(28.6139, 77.2090),
-        'Pune': const LatLng(18.5204, 73.8567),
-        'Kolkata': const LatLng(22.5726, 88.3639),
-        'Ahmedabad': const LatLng(23.0225, 72.5714),
-      };
+  static const Map<String, LatLng> _centerMap = {
+    'Mumbai': LatLng(19.0760, 72.8777),
+    'Bengaluru': LatLng(12.9716, 77.5946),
+    'Hyderabad': LatLng(17.3850, 78.4867),
+    'Chennai': LatLng(13.0827, 80.2707),
+    'Delhi': LatLng(28.6139, 77.2090),
+    'Pune': LatLng(18.5204, 73.8567),
+    'Kolkata': LatLng(22.5726, 88.3639),
+    'Ahmedabad': LatLng(23.0225, 72.5714),
+  };
 
   List<Map<String, dynamic>> get _rawZones => kZones
       .where((z) => z['city_key'] == widget.cityName)
@@ -49,9 +50,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
       .toList();
 
   List<Map<String, dynamic>> get _zones {
-    if (_rawZones.isNotEmpty) {
-      return _rawZones;
-    }
+    if (_rawZones.isNotEmpty) return _rawZones;
     final center = _centerMap[widget.cityName] ?? const LatLng(19.0760, 72.8777);
     return [
       {
@@ -84,23 +83,46 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
     ];
   }
 
-  Set<Marker> _buildMarkers() {
+  List<Marker> _buildMarkers() {
     return _zones.asMap().entries.map((entry) {
       final i = entry.key;
       final zone = entry.value;
       final tier = zone['tier'] as String;
-      final hue = tier == 'high'
-          ? BitmapDescriptor.hueOrange
+      final color = tier == 'high'
+          ? AppColors.danger
           : tier == 'medium'
-              ? BitmapDescriptor.hueAzure
-              : BitmapDescriptor.hueGreen;
+              ? AppColors.warning
+              : AppColors.success;
+      final isSelected = _selectedIndex == i;
+
       return Marker(
-        markerId: MarkerId(zone['zone'] as String),
-        position: LatLng(zone['lat'] as double, zone['lng'] as double),
-        icon: BitmapDescriptor.defaultMarkerWithHue(hue),
-        onTap: () => setState(() => _selectedIndex = i),
+        point: LatLng(zone['lat'] as double, zone['lng'] as double),
+        width: isSelected ? 44 : 36,
+        height: isSelected ? 44 : 36,
+        child: GestureDetector(
+          onTap: () => setState(() => _selectedIndex = i),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isSelected ? color : color.withValues(alpha: 0.9),
+              border: Border.all(color: Colors.white, width: isSelected ? 3 : 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.18),
+                  blurRadius: isSelected ? 12 : 6,
+                ),
+              ],
+            ),
+            child: Icon(
+              Icons.location_on,
+              color: Colors.white,
+              size: isSelected ? 22 : 18,
+            ),
+          ),
+        ),
       );
-    }).toSet();
+    }).toList();
   }
 
   Future<void> _select(Map<String, dynamic> zone) async {
@@ -111,18 +133,14 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
 
     final workerProvider = context.read<WorkerProvider>();
     final worker = workerProvider.worker;
-    if (worker == null) {
-      return;
-    }
+    if (worker == null) return;
 
     await workerProvider.setWorker(worker.copyWith(
       zone: zone['zone'] as String,
       city: zone['city'] as String,
     ));
 
-    if (!mounted) {
-      return;
-    }
+    if (!mounted) return;
 
     Navigator.pop(context, zone);
     ScaffoldMessenger.of(context).showSnackBar(
@@ -138,12 +156,19 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          GoogleMap(
-            initialCameraPosition: CameraPosition(target: center, zoom: 12.5),
-            markers: _buildMarkers(),
-            onTap: (_) => setState(() => _selectedIndex = null),
-            zoomControlsEnabled: false,
-            myLocationButtonEnabled: false,
+          FlutterMap(
+            options: MapOptions(
+              initialCenter: center,
+              initialZoom: 12.5,
+              onTap: (_, __) => setState(() => _selectedIndex = null),
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.example.gigshield',
+              ),
+              MarkerLayer(markers: _buildMarkers()),
+            ],
           ),
           Positioned(
             left: 0,
@@ -192,7 +217,8 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
                           _rawZones.isEmpty
                               ? 'No mapped zones yet. Pick a quick area below.'
                               : 'Tap a zone pin to select',
-                          style: const TextStyle(color: Colors.white70, fontSize: 11),
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 11),
                         ),
                       ],
                     ),
@@ -285,7 +311,8 @@ class _LegendRow extends StatelessWidget {
             decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           ),
           const SizedBox(width: 6),
-          Text(label, style: const TextStyle(color: Colors.white, fontSize: 10)),
+          Text(label,
+              style: const TextStyle(color: Colors.white, fontSize: 10)),
         ],
       ),
     );
@@ -320,7 +347,8 @@ class _ZoneCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   '${zone['zone']} ${zone['city']}',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w700),
                 ),
               ),
               Container(
@@ -347,20 +375,35 @@ class _ZoneCard extends StatelessWidget {
               Expanded(
                 child: _infoCol(
                   'Weekly Premium',
-                  '₹${(zone['premium'] as double).toInt()}',
+                  '?${(zone['premium'] as double).toInt()}',
                 ),
               ),
               Container(width: 1, height: 44, color: AppColors.divider),
               Expanded(
                 child: _infoCol(
                   'Coverage Limit',
-                  '₹${(zone['coverage'] as double).toInt()}',
+                  '?${(zone['coverage'] as double).toInt()}',
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          GradientButton(label: 'Select this zone →', onPressed: onSelect),
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
+              onPressed: onSelect,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
+              child: const Text('Select this zone ?',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+            ),
+          ),
         ],
       ),
     );
@@ -369,9 +412,11 @@ class _ZoneCard extends StatelessWidget {
   Widget _infoCol(String label, String value) {
     return Column(
       children: [
-        Text(label, style: const TextStyle(fontSize: 11, color: AppColors.textSoft)),
+        Text(label,
+            style: const TextStyle(fontSize: 11, color: AppColors.textSoft)),
         const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+        Text(value,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
       ],
     );
   }
