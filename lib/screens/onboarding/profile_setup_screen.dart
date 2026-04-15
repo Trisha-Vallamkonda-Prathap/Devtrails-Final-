@@ -71,6 +71,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       backgroundColor: AppColors.background,
       body: Column(
         children: [
+          // ── Teal gradient header ──
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -85,7 +86,16 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               children: [
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.arrow_back, color: Colors.white),
+                  child: Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.18),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.arrow_back,
+                        color: Colors.white, size: 18),
+                  ),
                 ),
                 const SizedBox(width: 14),
                 const Expanded(
@@ -102,10 +112,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                       ),
                       Text(
                         'A few details to personalise your coverage',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: Colors.white70, fontSize: 12),
                       ),
                     ],
                   ),
@@ -113,11 +120,13 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               ],
             ),
           ),
+          // ── Form ──
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
+                  const SizedBox(height: 8),
                   Center(
                     child: AvatarWidget(
                       name: _name,
@@ -128,7 +137,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  _Card(
+                  _FormCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -159,7 +168,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _Card(
+                  _FormCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -185,28 +194,33 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                             final name = platform.name[0].toUpperCase() +
                                 platform.name.substring(1);
                             return GestureDetector(
-                              onTap: () => setState(() => _platform = platform),
+                              onTap: () =>
+                                  setState(() => _platform = platform),
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 180),
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 9),
                                 decoration: selected
                                     ? BoxDecoration(
-                                        color: color.withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(12),
-                                        border:
-                                            Border.all(color: color, width: 2),
+                                        color:
+                                            color.withValues(alpha: 0.1),
+                                        borderRadius:
+                                            BorderRadius.circular(12),
+                                        border: Border.all(
+                                            color: color, width: 2),
                                       )
                                     : BoxDecoration(
                                         color: AppColors.background,
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius:
+                                            BorderRadius.circular(12),
                                         border: Border.all(
                                             color: AppColors.divider),
                                       ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    PlatformBadge(platform: platform, size: 24),
+                                    PlatformBadge(
+                                        platform: platform, size: 24),
                                     const SizedBox(width: 6),
                                     Text(
                                       name,
@@ -235,7 +249,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _Card(
+                  _FormCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -281,13 +295,15 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                               child: Text('per week',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      color: AppColors.textSoft, fontSize: 10)),
+                                      color: AppColors.textSoft,
+                                      fontSize: 10)),
                             ),
                             Expanded(
                               child: Text('₹8,000',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
-                                      color: AppColors.textSoft, fontSize: 10)),
+                                      color: AppColors.textSoft,
+                                      fontSize: 10)),
                             ),
                           ],
                         ),
@@ -318,8 +334,8 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   }
 }
 
-class _Card extends StatelessWidget {
-  const _Card({required this.child});
+class _FormCard extends StatelessWidget {
+  const _FormCard({required this.child});
   final Widget child;
 
   @override

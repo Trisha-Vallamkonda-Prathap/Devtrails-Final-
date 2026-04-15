@@ -13,12 +13,24 @@ class LocationProvider extends ChangeNotifier {
   bool get loading => _loading;
   bool get hasLocation => _result?.isSuccess == true;
   bool get spoofDetected => _result?.isSpoofDetected == true;
+
+  /// Medium-risk (trajectory jump / sensor mismatch) — warn but don't block
+  bool get hasMediumRisk => _result?.hasMediumRisk == true;
+  bool get hasLowRisk => _result?.hasLowRisk == true;
+
   String? get resolvedZone => _resolvedZone;
   String? get resolvedCity => _resolvedCity;
   double? get lat => _result?.lat;
   double? get lng => _result?.lng;
   double? get accuracy => _result?.accuracy;
-  String? get errorMessage => _result?.errorMessage;
+
+  /// User-facing message: spoof warning OR medium/low risk hint OR null
+  String? get errorMessage {
+    if (_result == null) return null;
+    if (_result!.isSpoofDetected) return _result!.errorMessage;
+    if (_result!.riskReason != null) return _result!.riskReason;
+    return null;
+  }
 
   Future<void> fetchLocation() async {
     _loading = true;
@@ -27,23 +39,32 @@ class LocationProvider extends ChangeNotifier {
     _result = await _svc.getCurrentLocation();
 
     if (_result!.isSuccess) {
-      _resolvedZone = _svc.resolveZoneFromCoords(_result!.lat!, _result!.lng!);
-      _resolvedCity = _svc.resolveCityFromCoords(_result!.lat!, _result!.lng!);
+      _resolvedZone =
+          _svc.resolveZoneFromCoords(_result!.lat!, _result!.lng!);
+      _resolvedCity =
+          _svc.resolveCityFromCoords(_result!.lat!, _result!.lng!);
+
+      // Auto-create dynamic zone if no match found
+      if (_resolvedZone == null && _result!.address != null) {
+        _resolvedZone =
+            _result!.address!.neighbourhood ?? 'Custom Zone';
+        _resolvedCity = _result!.address!.city ?? 'Unknown City';
+      }
     }
 
     _loading = false;
     notifyListeners();
   }
 
-  /// Validate that a manually selected zone matches current GPS position.
-  /// Returns null if OK, or a warning message if mismatch.
+  /// Validate manually selected zone against GPS.
+  /// Returns null if OK, warning string if mismatch.
   Future<String?> validateZoneSelection(
       String selectedZone, double lat, double lng) async {
     final gpsZone = _svc.resolveZoneFromCoords(lat, lng);
-    if (gpsZone == null) return null; // can't determine — allow
-    if (gpsZone == selectedZone) return null; // match
-    return 'Your GPS shows you are in $gpsZone, not $selectedZone. '
-        'Select $gpsZone for accurate coverage.';
+    if (gpsZone == null) return null;
+    if (gpsZone == selectedZone) return null;
+    return 'Your GPS shows you are near $gpsZone. '
+        'Select $gpsZone for accurate coverage, or continue with $selectedZone.';
   }
 
   void clear() {
