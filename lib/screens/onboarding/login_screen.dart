@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import '../../services/otp_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -35,34 +35,46 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> _sendOtp() async {
-    if (!_canContinue || _role == null) {
-      _showValidationMessage();
-      return;
-    }
-
-    setState(() => _loading = true);
-
-    final prefs = await SharedPreferences.getInstance();
-    final isReturning = prefs.getString('worker_json') != null;
-
-    await Future<void>.delayed(const Duration(milliseconds: 900));
-    if (!mounted) {
-      return;
-    }
-    setState(() => _loading = false);
-
-    Navigator.push(
-      context,
-      CupertinoPageRoute<void>(
-        builder: (_) => OtpScreen(
-          phone: _phone,
-          role: _role!,
-          isReturningUser: isReturning,
-        ),
-      ),
-    );
+Future<void> _sendOtp() async {
+  if (!_canContinue || _role == null) {
+    _showValidationMessage();
+    return;
   }
+
+  setState(() => _loading = true);
+
+  final prefs = await SharedPreferences.getInstance();
+  final isReturning = prefs.getString('worker_json') != null;
+
+  await OtpService.sendOtp(
+    phone: _phone,
+    onSuccess: () {
+      if (!mounted) return;
+
+      setState(() => _loading = false);
+
+      Navigator.push(
+        context,
+        CupertinoPageRoute<void>(
+          builder: (_) => OtpScreen(
+            phone: _phone,
+            role: _role!,
+            isReturningUser: isReturning,
+          ),
+        ),
+      );
+    },
+    onError: (msg) {
+      if (!mounted) return;
+
+      setState(() => _loading = false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(msg)),
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {

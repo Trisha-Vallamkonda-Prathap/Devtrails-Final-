@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
-
+import '../../services/otp_service.dart';
 import '../../providers/payout_provider.dart';
 import '../../providers/role_provider.dart';
 import '../../providers/worker_provider.dart';
@@ -35,6 +35,7 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   bool _complete = false;
   bool _verifying = false;
+  String _otp = '';
   int _seconds = 30;
   Timer? _timer;
 
@@ -57,61 +58,36 @@ class _OtpScreenState extends State<OtpScreen> {
     });
   }
 
-  Future<void> _verify() async {
-    setState(() => _verifying = true);
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
-    if (!mounted) {
-      return;
-    }
-    setState(() => _verifying = false);
-    await context.read<RoleProvider>().setRole(widget.role);
-    await AuthUtils.markLoggedIn();
+Future<void> _verify() async {
+  setState(() => _verifying = true);
 
-    final userId = AuthUtils.userIdFromPhone(phone: widget.phone, role: widget.role);
-    final isFirstLogin = await AuthUtils.isFirstLogin(userId);
+  final success = await OtpService.verifyOtp(_otp);
 
-    if (!mounted) {
-      return;
-    }
+  if (!mounted) return;
 
-    if (widget.role == AppRole.worker && widget.isReturningUser) {
-      await context.read<WorkerProvider>().init();
-      context.read<PayoutProvider>().init();
-      if (!mounted) {
-        return;
-      }
-      Navigator.pushAndRemoveUntil(
-        context,
-        CupertinoPageRoute<void>(builder: (_) => const MainShell()),
-        (route) => false,
-      );
-      return;
-    }
+  setState(() => _verifying = false);
 
-    if (isFirstLogin) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        CupertinoPageRoute<void>(
-          builder: (_) => SetPasswordScreen(role: widget.role, phone: widget.phone),
-        ),
-        (route) => false,
-      );
-      return;
-    }
-
-    if (widget.role == AppRole.insurer) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        CupertinoPageRoute<void>(builder: (_) => const InsuranceDashboardScreen()),
-        (route) => false,
-      );
-      return;
-    }
-    Navigator.push(
-      context,
-      CupertinoPageRoute<void>(builder: (_) => const TermsScreen()),
+  if (!success) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Invalid OTP')),
     );
+    return;
   }
+
+  await context.read<RoleProvider>().setRole(widget.role);
+  await AuthUtils.markLoggedIn();
+
+  final userId = AuthUtils.userIdFromPhone(
+    phone: widget.phone,
+    role: widget.role,
+  );
+
+  final isFirstLogin = await AuthUtils.isFirstLogin(userId);
+
+  if (!mounted) return;
+
+  // KEEP YOUR EXISTING NAVIGATION LOGIC BELOW
+}
 
   @override
   void dispose() {
@@ -196,8 +172,18 @@ class _OtpScreenState extends State<OtpScreen> {
                                   inactiveColor: AppColors.divider,
                                   selectedColor: AppColors.primary,
                                 ),
-                                onCompleted: (value) => setState(() => _complete = true),
-                                onChanged: (value) => setState(() => _complete = value.length == 6),
+                                onCompleted: (value) {
+                                  setState(() {
+                                    _otp = value;
+                                    _complete = true;
+                                  });
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    _otp = value;
+                                    _complete = value.length == 6;
+                                  });
+                                },
                               ),
                               const SizedBox(height: 12),
                               Center(
@@ -221,16 +207,6 @@ class _OtpScreenState extends State<OtpScreen> {
                                 onPressed: _complete ? _verify : null,
                               ),
                               const SizedBox(height: 10),
-                              const Center(
-                                child: Text(
-                                  'Any 6 digits work for demo',
-                                  style: TextStyle(
-                                    color: AppColors.textSoft,
-                                    fontSize: 11,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),
