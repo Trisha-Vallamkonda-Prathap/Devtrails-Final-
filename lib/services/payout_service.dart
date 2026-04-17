@@ -72,7 +72,15 @@ class PayoutService {
     final res = await http.post(
       uri,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'payout_id': payoutId, 'worker_id': workerId}),
+      body: jsonEncode({
+        'payout_id': payoutId, 
+        'worker_id': workerId,
+        'account_number': '1234567890', // Replace with actual
+        'ifsc': 'HDFC0001234', // Replace with actual
+        'name': 'John Doe', // Replace with actual
+        'contact': '9999999999', // Replace with actual
+        'email': 'john@example.com' // Replace with actual
+      }),
     );
     return jsonDecode(res.body) as Map<String, dynamic>;
   }

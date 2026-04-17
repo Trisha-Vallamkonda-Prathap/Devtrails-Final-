@@ -77,7 +77,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
 
     Navigator.pushAndRemoveUntil(
       context,
-      CupertinoPageRoute<void>(builder: (_) => const TermsScreen()),
+      CupertinoPageRoute<void>(builder: (_) => TermsScreen(phone: widget.phone)),
       (route) => false,
     );
   }

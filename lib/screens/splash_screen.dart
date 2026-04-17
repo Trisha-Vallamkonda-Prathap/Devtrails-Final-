@@ -2,17 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../providers/worker_provider.dart';
-import '../providers/role_provider.dart';
 import '../theme/app_colors.dart';
-import '../utils/auth_utils.dart';
 import '../widgets/gigshield_logo.dart';
-import 'insurer/insurance_dashboard_screen.dart';
-import 'main/main_shell.dart';
 import 'onboarding/login_screen.dart';
-import 'onboarding/terms_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -40,39 +32,9 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) {
       return;
     }
-    await context.read<RoleProvider>().init();
-    final workerProvider = context.read<WorkerProvider>();
-    await workerProvider.init();
-    if (!mounted) {
-      return;
-    }
-    final isLoggedIn = await AuthUtils.isLoggedIn();
-    if (!mounted) {
-      return;
-    }
-
-    if (!isLoggedIn) {
-      Navigator.pushReplacement(
-        context,
-        CupertinoPageRoute<void>(builder: (_) => const LoginScreen()),
-      );
-      return;
-    }
-
-    final roleProvider = context.read<RoleProvider>();
-    if (roleProvider.isInsurer) {
-      Navigator.pushReplacement(
-        context,
-        CupertinoPageRoute<void>(builder: (_) => const InsuranceDashboardScreen()),
-      );
-      return;
-    }
-
     Navigator.pushReplacement(
       context,
-      CupertinoPageRoute<void>(
-        builder: (_) => workerProvider.isOnboarded ? const MainShell() : const TermsScreen(),
-      ),
+      CupertinoPageRoute<void>(builder: (_) => const LoginScreen()),
     );
   }
 

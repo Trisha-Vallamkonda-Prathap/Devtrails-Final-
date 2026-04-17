@@ -43,25 +43,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _loading = true);
 
-    final prefs = await SharedPreferences.getInstance();
-    final isReturning = prefs.getString('worker_json') != null;
+    try {
+      // Dummy OTP mode: no backend call required.
+      final prefs = await SharedPreferences.getInstance();
+      final isReturning = prefs.getString('worker_json') != null;
 
-    await Future<void>.delayed(const Duration(milliseconds: 900));
-    if (!mounted) {
-      return;
-    }
-    setState(() => _loading = false);
+      if (!mounted) return;
 
-    Navigator.push(
-      context,
-      CupertinoPageRoute<void>(
-        builder: (_) => OtpScreen(
-          phone: _phone,
-          role: _role!,
-          isReturningUser: isReturning,
+      Navigator.push(
+        context,
+        CupertinoPageRoute<void>(
+          builder: (_) => OtpScreen(
+            phone: _phone,
+            role: _role!,
+            isReturningUser: isReturning,
+            debugOtp: 'Any 6 digits',
+          ),
         ),
-      ),
-    );
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    }
   }
 
   @override

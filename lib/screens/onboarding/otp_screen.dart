@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/payout_provider.dart';
+import '../../providers/policy_provider.dart';
 import '../../providers/role_provider.dart';
 import '../../providers/worker_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/auth_utils.dart';
-import '../insurer/insurance_dashboard_screen.dart';
-import '../main/main_shell.dart';
+import '../subscription_payment_screen.dart';
 import 'set_password_screen.dart';
 import 'terms_screen.dart';
 
@@ -22,11 +21,13 @@ class OtpScreen extends StatefulWidget {
     required this.phone,
     required this.role,
     this.isReturningUser = false,
+    this.debugOtp,
   });
 
   final String phone;
   final AppRole role;
   final bool isReturningUser;
+  final String? debugOtp;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -37,10 +38,12 @@ class _OtpScreenState extends State<OtpScreen> {
   bool _verifying = false;
   int _seconds = 30;
   Timer? _timer;
+  late TextEditingController _otpController;
 
   @override
   void initState() {
     super.initState();
+    _otpController = TextEditingController();
     _startTimer();
   }
 
@@ -57,65 +60,104 @@ class _OtpScreenState extends State<OtpScreen> {
     });
   }
 
-  Future<void> _verify() async {
-    setState(() => _verifying = true);
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
-    if (!mounted) {
-      return;
-    }
-    setState(() => _verifying = false);
-    await context.read<RoleProvider>().setRole(widget.role);
-    await AuthUtils.markLoggedIn();
-
-    final userId = AuthUtils.userIdFromPhone(phone: widget.phone, role: widget.role);
-    final isFirstLogin = await AuthUtils.isFirstLogin(userId);
-
-    if (!mounted) {
-      return;
-    }
-
-    if (widget.role == AppRole.worker && widget.isReturningUser) {
-      await context.read<WorkerProvider>().init();
-      context.read<PayoutProvider>().init();
-      if (!mounted) {
-        return;
-      }
-      Navigator.pushAndRemoveUntil(
-        context,
-        CupertinoPageRoute<void>(builder: (_) => const MainShell()),
-        (route) => false,
+  Future<void> _verify(String otp) async {
+    if (otp.length != 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a 6-digit OTP')),
       );
       return;
     }
 
-    if (isFirstLogin) {
+    setState(() => _verifying = true);
+
+    try {
+      // Dummy OTP mode: accept any 6-digit number without backend call.
+      final isSixDigit = RegExp(r'^\d{6}$').hasMatch(otp);
+      if (!isSixDigit) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Enter any 6-digit OTP')),
+        );
+        return;
+      }
+
+      await context.read<RoleProvider>().setRole(widget.role);
+      await AuthUtils.markLoggedIn();
+
+      final userId = AuthUtils.userIdFromPhone(phone: widget.phone, role: widget.role);
+      final isFirstLogin = await AuthUtils.isFirstLogin(userId);
+
+      if (!mounted) return;
+
+      if (isFirstLogin) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          CupertinoPageRoute<void>(
+            builder: (_) => SetPasswordScreen(role: widget.role, phone: widget.phone),
+          ),
+          (route) => false,
+        );
+        return;
+      }
+
+      if (widget.role == AppRole.worker) {
+        final workerProvider = context.read<WorkerProvider>();
+        await workerProvider.init();
+        final worker = workerProvider.worker;
+
+        if (!mounted) return;
+
+        if (worker == null || worker.phone != widget.phone) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            CupertinoPageRoute<void>(
+              builder: (_) => TermsScreen(phone: widget.phone),
+            ),
+            (route) => false,
+          );
+          return;
+        }
+
+        final policyProvider = context.read<PolicyProvider>();
+        await policyProvider.loadPolicy(worker.id);
+
+        if (!mounted) return;
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          CupertinoPageRoute<void>(
+            builder: (_) => SubscriptionPaymentScreen(
+              tier: policyProvider.activePolicy?.tier.name ?? 'Standard',
+              premium: policyProvider.activePolicy?.weeklyPremium ?? 120.0,
+              hasValidSubscription: policyProvider.activePolicy != null,
+            ),
+          ),
+          (route) => false,
+        );
+        return;
+      }
+
       Navigator.pushAndRemoveUntil(
         context,
         CupertinoPageRoute<void>(
-          builder: (_) => SetPasswordScreen(role: widget.role, phone: widget.phone),
+          builder: (_) => TermsScreen(phone: widget.phone),
         ),
         (route) => false,
       );
-      return;
-    }
-
-    if (widget.role == AppRole.insurer) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        CupertinoPageRoute<void>(builder: (_) => const InsuranceDashboardScreen()),
-        (route) => false,
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
       );
-      return;
+    } finally {
+      if (mounted) {
+        setState(() => _verifying = false);
+      }
     }
-    Navigator.push(
-      context,
-      CupertinoPageRoute<void>(builder: (_) => const TermsScreen()),
-    );
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _otpController.dispose();
     super.dispose();
   }
 
@@ -151,12 +193,23 @@ class _OtpScreenState extends State<OtpScreen> {
                             ),
                           ),
                           Text(
-                            widget.isReturningUser ? 'Welcome back! Verify to continue.' : 'OTP sent to +91 ${widget.phone}',
+                            widget.isReturningUser ? 'Welcome back! Verify to continue.' : 'OTP sent to ${widget.phone}',
                             style: TextStyle(
                               color: Colors.white.withValues(alpha: 0.75),
                               fontSize: 14,
                             ),
                           ),
+                          if (widget.debugOtp != null && widget.debugOtp!.isNotEmpty) ...[
+                            const SizedBox(height: 8),
+                            Text(
+                              'Fallback OTP: ${widget.debugOtp}',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.95),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 32),
                         ],
                       ),
@@ -181,6 +234,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               PinCodeTextField(
                                 appContext: context,
                                 length: 6,
+                                controller: _otpController,
                                 keyboardType: TextInputType.number,
                                 animationType: AnimationType.scale,
                                 enableActiveFill: true,
@@ -196,7 +250,10 @@ class _OtpScreenState extends State<OtpScreen> {
                                   inactiveColor: AppColors.divider,
                                   selectedColor: AppColors.primary,
                                 ),
-                                onCompleted: (value) => setState(() => _complete = true),
+                                onCompleted: (value) {
+                                  setState(() => _complete = true);
+                                  _verify(value);
+                                },
                                 onChanged: (value) => setState(() => _complete = value.length == 6),
                               ),
                               const SizedBox(height: 12),
@@ -218,18 +275,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               GradientButton(
                                 label: 'Verify OTP',
                                 isLoading: _verifying,
-                                onPressed: _complete ? _verify : null,
-                              ),
-                              const SizedBox(height: 10),
-                              const Center(
-                                child: Text(
-                                  'Any 6 digits work for demo',
-                                  style: TextStyle(
-                                    color: AppColors.textSoft,
-                                    fontSize: 11,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                ),
+                                onPressed: _complete ? () => _verify(_otpController.text) : null,
                               ),
                             ],
                           ),

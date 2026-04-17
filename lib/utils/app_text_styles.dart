@@ -28,5 +28,11 @@ class AppTextStyles {
     color: Colors.green,
   );
 
+  static const TextStyle error = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Colors.red,
+  );
+
   const AppTextStyles._();
 }
