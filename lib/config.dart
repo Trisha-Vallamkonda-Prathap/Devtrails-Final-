@@ -1,5 +1,9 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 const bool kUseMockData = true;
 const String kBaseUrl = 'http://localhost:8000';
+String get kRazorpayKey => dotenv.env['RAZORPAY_KEY_ID'] ?? '';
+String get kRazorpaySecret => dotenv.env['RAZORPAY_KEY_SECRET'] ?? '';
 
 const List<Map<String, dynamic>> kZones = [
   {

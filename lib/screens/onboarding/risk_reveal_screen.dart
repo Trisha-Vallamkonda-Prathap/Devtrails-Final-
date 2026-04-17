@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../models/trigger_event.dart';
@@ -59,16 +60,21 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
     setState(() => _activating = true);
     final weatherProvider = context.read<WeatherProvider>();
     final payoutProvider = context.read<PayoutProvider>();
-    final rainTrigger = weatherProvider.triggers.where((t) => t.type == TriggerType.rain).cast<TriggerEvent?>().firstWhere(
+    final rainTrigger = weatherProvider.triggers
+        .where((t) => t.type == TriggerType.rain)
+        .cast<TriggerEvent?>()
+        .firstWhere(
           (t) => t != null,
           orElse: () => null,
         );
     final policyProvider = context.read<PolicyProvider>();
     await policyProvider.purchase(
-          widget.worker,
-          payoutHistory: payoutProvider.history,
-          currentRainPercent: rainTrigger?.percent ?? 0.5,
-        );
+      widget.worker,
+      payoutHistory: payoutProvider.history,
+      currentRainPercent: rainTrigger?.percent ?? 0.5,
+    );
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('session_has_paid_subscription');
     payoutProvider.init();
     await weatherProvider.fetch(widget.worker.fullZone);
     if (!mounted) {
@@ -80,7 +86,8 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
         builder: (_) => SubscriptionPaymentScreen(
           tier: policyProvider.policy?.tier.name ?? widget.worker.tier.name,
           premium: policyProvider.policy?.weeklyPremium ??
-              RiskEngine.getPremium(widget.worker.tier, city: widget.worker.city),
+              RiskEngine.getPremium(widget.worker.tier,
+                  city: widget.worker.city),
           hasValidSubscription: false,
         ),
       ),
@@ -96,8 +103,10 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
             ? 0.55
             : 0.32;
     final tierColor = AppColors.tierColor(widget.worker.tier.name);
-    final premium = RiskEngine.getPremium(widget.worker.tier, city: widget.worker.city);
-    final limit = RiskEngine.getCoverageLimit(widget.worker.tier, city: widget.worker.city);
+    final premium =
+        RiskEngine.getPremium(widget.worker.tier, city: widget.worker.city);
+    final limit = RiskEngine.getCoverageLimit(widget.worker.tier,
+        city: widget.worker.city);
 
     return Scaffold(
       backgroundColor: _bgColor,
@@ -113,7 +122,10 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
                       children: [
                         const Text(
                           'Analyzing your zone...',
-                          style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 0.5),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              letterSpacing: 0.5),
                         ),
                         const SizedBox(height: 40),
                         ...List.generate(
@@ -140,15 +152,21 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
                           children: [
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('Weather patterns', style: TextStyle(color: AppColors.textSoft, fontSize: 11)),
+                              child: Text('Weather patterns',
+                                  style: TextStyle(
+                                      color: AppColors.textSoft, fontSize: 11)),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('Zone history', style: TextStyle(color: AppColors.textSoft, fontSize: 11)),
+                              child: Text('Zone history',
+                                  style: TextStyle(
+                                      color: AppColors.textSoft, fontSize: 11)),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 12),
-                              child: Text('Risk factors', style: TextStyle(color: AppColors.textSoft, fontSize: 11)),
+                              child: Text('Risk factors',
+                                  style: TextStyle(
+                                      color: AppColors.textSoft, fontSize: 11)),
                             ),
                           ],
                         ),
@@ -162,7 +180,10 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
                     children: [
                       const Text(
                         'Your Risk Profile',
-                        style: TextStyle(color: AppColors.textSoft, fontSize: 13, letterSpacing: 1.5),
+                        style: TextStyle(
+                            color: AppColors.textSoft,
+                            fontSize: 13,
+                            letterSpacing: 1.5),
                       ),
                       const SizedBox(height: 40),
                       TweenAnimationBuilder<double>(
@@ -181,7 +202,8 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
                                   strokeWidth: 14,
                                   backgroundColor: Colors.white12,
                                   strokeCap: StrokeCap.round,
-                                  valueColor: AlwaysStoppedAnimation<Color>(tierColor),
+                                  valueColor:
+                                      AlwaysStoppedAnimation<Color>(tierColor),
                                 ),
                                 Center(
                                   child: Column(
@@ -198,7 +220,8 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
                                       Text(
                                         'risk',
                                         style: TextStyle(
-                                          color: Colors.white.withValues(alpha: 0.6),
+                                          color: Colors.white
+                                              .withValues(alpha: 0.6),
                                           fontSize: 14,
                                         ),
                                       ),
@@ -215,15 +238,22 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
                         opacity: _showBadge ? 1 : 0,
                         duration: const Duration(milliseconds: 600),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 10),
                           decoration: BoxDecoration(
                             color: tierColor.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(30),
-                            border: Border.all(color: tierColor.withValues(alpha: 0.6), width: 1.5),
+                            border: Border.all(
+                                color: tierColor.withValues(alpha: 0.6),
+                                width: 1.5),
                           ),
                           child: Text(
                             '${widget.worker.tier.name.toUpperCase()} RISK ZONE',
-                            style: TextStyle(color: tierColor, fontSize: 18, fontWeight: FontWeight.w700, letterSpacing: 1.2),
+                            style: TextStyle(
+                                color: tierColor,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1.2),
                           ),
                         ),
                       ),
@@ -231,7 +261,8 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Text(
-                          RiskEngine.getReason(widget.worker.tier, widget.worker.zone),
+                          RiskEngine.getReason(
+                              widget.worker.tier, widget.worker.zone),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.7),
@@ -253,18 +284,35 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Weekly premium', style: TextStyle(color: AppColors.textSoft, fontSize: 12)),
-                                  Text('₹${premium.toInt()}', style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w700)),
+                                  const Text('Weekly premium',
+                                      style: TextStyle(
+                                          color: AppColors.textSoft,
+                                          fontSize: 12)),
+                                  Text('₹${premium.toInt()}',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.w700)),
                                 ],
                               ),
                             ),
-                            Container(width: 1, height: 44, color: AppColors.darkBorder),
+                            Container(
+                                width: 1,
+                                height: 44,
+                                color: AppColors.darkBorder),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  const Text('Coverage limit', style: TextStyle(color: AppColors.textSoft, fontSize: 12)),
-                                  Text('₹${limit.toInt()}', style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w700)),
+                                  const Text('Coverage limit',
+                                      style: TextStyle(
+                                          color: AppColors.textSoft,
+                                          fontSize: 12)),
+                                  Text('₹${limit.toInt()}',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.w700)),
                                 ],
                               ),
                             ),

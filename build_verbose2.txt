@@ -1,0 +1,1073 @@
+[ +424 ms] Artifact Instance of 'MaterialFonts' is not required, skipping update.
+[   +2 ms] Artifact Instance of 'GradleWrapper' is not required, skipping update.
+[        ] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[   +1 ms] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterSdk' is not required, skipping update.
+[        ] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FontSubsetArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'PubDependencies' is not required, skipping update.
+[   +1 ms] executing: [C:\flutter/] git -c log.showSignature=false log HEAD -n 1 --pretty=format:%ad --date=iso
+[ +154 ms] Exit code 0 from: git -c log.showSignature=false log HEAD -n 1 --pretty=format:%ad --date=iso
+[        ] 2026-03-25 16:21:00 -0700
+[  +20 ms] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterEngineStamp' is not required, skipping update.
+[        ] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[   +3 ms] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[  +62 ms] Artifact Instance of 'MaterialFonts' is not required, skipping update.
+[        ] Artifact Instance of 'GradleWrapper' is not required, skipping update.
+[   +2 ms] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterEngineStamp' is not required, skipping update.
+[        ] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterSdk' is not required, skipping update.
+[        ] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FontSubsetArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'PubDependencies' is not required, skipping update.
+[  +84 ms] Skipping pub get: version match.
+[  +98 ms] Found plugin shared_preferences at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences-2.5.5\
+[   +6 ms] Found plugin shared_preferences_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_windows-2.4.1\
+[   +7 ms] Found plugin path_provider_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_windows-2.3.0\
+[  +10 ms] Found plugin shared_preferences_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_web-2.4.3\
+[   +5 ms] Found plugin shared_preferences_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_linux-2.4.1\
+[   +2 ms] Found plugin path_provider_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_linux-2.2.1\
+[   +5 ms] Found plugin shared_preferences_foundation at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_foundation-2.5.6\
+[   +3 ms] Found plugin shared_preferences_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.23\
+[   +3 ms] Found plugin sensors_plus at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\sensors_plus-6.1.2\
+[   +4 ms] Found plugin razorpay_flutter at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\razorpay_flutter-1.4.4\
+[  +17 ms] Found plugin image_picker at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker-1.2.1\
+[   +3 ms] Found plugin image_picker_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_windows-0.2.2\
+[  +10 ms] Found plugin file_selector_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_windows-0.9.3+5\
+[   +4 ms] Found plugin image_picker_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_macos-0.2.2+1\
+[   +3 ms] Found plugin file_selector_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_macos-0.9.5\
+[   +4 ms] Found plugin image_picker_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_linux-0.2.2\
+[   +3 ms] Found plugin file_selector_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_linux-0.9.4\
+[   +4 ms] Found plugin image_picker_ios at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_ios-0.8.13+6\
+[   +4 ms] Found plugin image_picker_for_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_for_web-3.1.1\
+[   +7 ms] Found plugin image_picker_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.13+16\
+[   +2 ms] Found plugin flutter_plugin_android_lifecycle at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.34\
+[   +7 ms] Found plugin path_provider at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider-2.1.5\
+[   +3 ms] Found plugin path_provider_foundation at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_foundation-2.6.0\
+[  +13 ms] Found plugin path_provider_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_android-2.3.1\
+[   +1 ms] Found plugin jni_flutter at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\jni_flutter-1.0.1\
+[   +1 ms] Found plugin jni at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\jni-1.0.0\
+[   +3 ms] Found plugin geolocator at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator-12.0.0\
+[   +1 ms] Found plugin geolocator_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_windows-0.2.5\
+[   +2 ms] Found plugin geolocator_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_web-4.1.3\
+[   +2 ms] Found plugin geolocator_apple at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_apple-2.3.13\
+[   +2 ms] Found plugin geolocator_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.2\
+[   +5 ms] Found plugin flutter_secure_storage at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage-9.2.4\
+[   +1 ms] Found plugin flutter_secure_storage_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_windows-3.1.2\
+[   +4 ms] Found plugin flutter_secure_storage_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_web-1.2.1\
+[   +2 ms] Found plugin flutter_secure_storage_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_macos-3.1.3\
+[   +1 ms] Found plugin flutter_secure_storage_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_linux-1.2.3\
+[  +14 ms] Found plugin connectivity_plus at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\connectivity_plus-6.1.5\
+[  +58 ms] Found plugin shared_preferences at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences-2.5.5\
+[   +2 ms] Found plugin shared_preferences_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_windows-2.4.1\
+[   +3 ms] Found plugin path_provider_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_windows-2.3.0\
+[   +7 ms] Found plugin shared_preferences_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_web-2.4.3\
+[   +2 ms] Found plugin shared_preferences_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_linux-2.4.1\
+[   +1 ms] Found plugin path_provider_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_linux-2.2.1\
+[   +2 ms] Found plugin shared_preferences_foundation at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_foundation-2.5.6\
+[   +1 ms] Found plugin shared_preferences_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.23\
+[   +1 ms] Found plugin sensors_plus at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\sensors_plus-6.1.2\
+[   +3 ms] Found plugin razorpay_flutter at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\razorpay_flutter-1.4.4\
+[   +9 ms] Found plugin image_picker at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker-1.2.1\
+[   +1 ms] Found plugin image_picker_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_windows-0.2.2\
+[   +8 ms] Found plugin file_selector_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_windows-0.9.3+5\
+[   +2 ms] Found plugin image_picker_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_macos-0.2.2+1\
+[   +1 ms] Found plugin file_selector_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_macos-0.9.5\
+[   +1 ms] Found plugin image_picker_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_linux-0.2.2\
+[   +1 ms] Found plugin file_selector_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_linux-0.9.4\
+[   +1 ms] Found plugin image_picker_ios at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_ios-0.8.13+6\
+[   +1 ms] Found plugin image_picker_for_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_for_web-3.1.1\
+[   +1 ms] Found plugin image_picker_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.13+16\
+[   +1 ms] Found plugin flutter_plugin_android_lifecycle at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.34\
+[   +3 ms] Found plugin path_provider at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider-2.1.5\
+[   +1 ms] Found plugin path_provider_foundation at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_foundation-2.6.0\
+[   +8 ms] Found plugin path_provider_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_android-2.3.1\
+[   +1 ms] Found plugin jni_flutter at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\jni_flutter-1.0.1\
+[   +1 ms] Found plugin jni at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\jni-1.0.0\
+[   +3 ms] Found plugin geolocator at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator-12.0.0\
+[   +1 ms] Found plugin geolocator_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_windows-0.2.5\
+[   +2 ms] Found plugin geolocator_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_web-4.1.3\
+[   +1 ms] Found plugin geolocator_apple at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_apple-2.3.13\
+[   +1 ms] Found plugin geolocator_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.2\
+[   +3 ms] Found plugin flutter_secure_storage at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage-9.2.4\
+[   +1 ms] Found plugin flutter_secure_storage_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_windows-3.1.2\
+[   +2 ms] Found plugin flutter_secure_storage_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_web-1.2.1\
+[   +2 ms] Found plugin flutter_secure_storage_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_macos-3.1.3\
+[   +1 ms] Found plugin flutter_secure_storage_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_linux-1.2.3\
+[  +10 ms] Found plugin connectivity_plus at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\connectivity_plus-6.1.5\
+[  +18 ms] Skipping generating web_plugin_registrant.dart because it is up-to-date.
+[  +32 ms] Found plugin shared_preferences at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences-2.5.5\
+[   +1 ms] Found plugin shared_preferences_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_windows-2.4.1\
+[   +4 ms] Found plugin path_provider_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_windows-2.3.0\
+[   +5 ms] Found plugin shared_preferences_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_web-2.4.3\
+[   +3 ms] Found plugin shared_preferences_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_linux-2.4.1\
+[   +1 ms] Found plugin path_provider_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_linux-2.2.1\
+[   +2 ms] Found plugin shared_preferences_foundation at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_foundation-2.5.6\
+[   +1 ms] Found plugin shared_preferences_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.23\
+[   +1 ms] Found plugin sensors_plus at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\sensors_plus-6.1.2\
+[   +3 ms] Found plugin razorpay_flutter at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\razorpay_flutter-1.4.4\
+[  +10 ms] Found plugin image_picker at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker-1.2.1\
+[   +2 ms] Found plugin image_picker_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_windows-0.2.2\
+[   +7 ms] Found plugin file_selector_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_windows-0.9.3+5\
+[   +2 ms] Found plugin image_picker_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_macos-0.2.2+1\
+[   +2 ms] Found plugin file_selector_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_macos-0.9.5\
+[   +2 ms] Found plugin image_picker_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_linux-0.2.2\
+[   +2 ms] Found plugin file_selector_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_linux-0.9.4\
+[   +1 ms] Found plugin image_picker_ios at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_ios-0.8.13+6\
+[   +1 ms] Found plugin image_picker_for_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_for_web-3.1.1\
+[   +2 ms] Found plugin image_picker_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.13+16\
+[   +1 ms] Found plugin flutter_plugin_android_lifecycle at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.34\
+[   +2 ms] Found plugin path_provider at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider-2.1.5\
+[   +1 ms] Found plugin path_provider_foundation at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_foundation-2.6.0\
+[   +9 ms] Found plugin path_provider_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_android-2.3.1\
+[   +1 ms] Found plugin jni_flutter at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\jni_flutter-1.0.1\
+[   +1 ms] Found plugin jni at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\jni-1.0.0\
+[   +5 ms] Found plugin geolocator at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator-12.0.0\
+[   +2 ms] Found plugin geolocator_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_windows-0.2.5\
+[   +5 ms] Found plugin geolocator_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_web-4.1.3\
+[   +1 ms] Found plugin geolocator_apple at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_apple-2.3.13\
+[   +1 ms] Found plugin geolocator_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.2\
+[   +3 ms] Found plugin flutter_secure_storage at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage-9.2.4\
+[   +1 ms] Found plugin flutter_secure_storage_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_windows-3.1.2\
+[   +4 ms] Found plugin flutter_secure_storage_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_web-1.2.1\
+[   +3 ms] Found plugin flutter_secure_storage_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_macos-3.1.3\
+[   +1 ms] Found plugin flutter_secure_storage_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_linux-1.2.3\
+[  +10 ms] Found plugin connectivity_plus at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\connectivity_plus-6.1.5\
+[   +8 ms] Generating C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android\app\src\main\java\io\flutter\plugins\GeneratedPluginRegistrant.java
+[   +1 ms] Skipping generating GeneratedPluginRegistrant.java because it is up-to-date.
+[   +7 ms] Skipping generating generated_plugin_registrant.h because it is up-to-date.
+[   +1 ms] Skipping generating generated_plugin_registrant.cc because it is up-to-date.
+[   +1 ms] Skipping generating generated_plugins.cmake because it is up-to-date.
+[  +48 ms] executing: C:\Program Files\Android\Android Studio\jbr\bin\java -version
+[ +307 ms] Exit code 0 from: C:\Program Files\Android\Android Studio\jbr\bin\java -version
+[        ] openjdk version "21.0.8" 2025-07-15
+           OpenJDK Runtime Environment (build 21.0.8+-14018985-b1038.68)
+           OpenJDK 64-Bit Server VM (build 21.0.8+-14018985-b1038.68, mixed mode)
+[   +2 ms] executing: C:\Program Files\Android\Android Studio\jbr\bin\java -version
+[ +206 ms] Exit code 0 from: C:\Program Files\Android\Android Studio\jbr\bin\java -version
+[        ] openjdk version "21.0.8" 2025-07-15
+           OpenJDK Runtime Environment (build 21.0.8+-14018985-b1038.68)
+           OpenJDK 64-Bit Server VM (build 21.0.8+-14018985-b1038.68, mixed mode)
+[   +9 ms] Top-level Gradle build file not found, skipping migration of task "clean".
+[   +3 ms] executing: C:\Program Files\Android\Android Studio\jbr\bin\java --version
+[ +199 ms] Exit code 0 from: C:\Program Files\Android\Android Studio\jbr\bin\java --version
+[        ] openjdk 21.0.8 2025-07-15
+           OpenJDK Runtime Environment (build 21.0.8+-14018985-b1038.68)
+           OpenJDK 64-Bit Server VM (build 21.0.8+-14018985-b1038.68, mixed mode)
+[   +2 ms] Version of Java is different than impacted version, no migration attempted.
+[  +19 ms] CMake project not found, skipping support Android 15 16k page size migration.
+[   +6 ms] Using gradle from C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android\gradlew.bat.
+[  +15 ms] LocalFile: 'C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android\build.gradle.kts' doesn't provide an AGP version. Checking settings.
+[   +1 ms] LocalFile: 'C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android\settings.gradle.kts' provides AGP version: 8.11.1
+[  +13 ms] Running Gradle task 'assembleDebug'...
+[   +1 ms] executing: [C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android/] C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android\gradlew.bat --full-stacktrace --info -Pverbose=true -Ptarget-platform=android-arm,android-arm64,android-x64 -Ptarget=lib\main.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxVVFRFUl9WRVJTSU9OPTMuNDEuNg==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049ZGI1MGUyMDE2OA==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NDI1Y2ZiNTRkMA==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMS40 -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=false assembleDebug
+[ +977 ms] Initialized native services in: C:\Users\Trisha V P\.gradle\native
+[   +1 ms] Initialized jansi services in: C:\Users\Trisha V P\.gradle\native
+[ +534 ms] The client will now receive all logging from the daemon (pid: 22248). The daemon log file: C:\Users\Trisha V P\.gradle\daemon\8.14\daemon-22248.out.log
+[        ] Starting 8th build in daemon [uptime: 25 mins 22.41 secs, performance: 100%, GC rate: 0.00/s, heap usage: 0% of 8 GiB, non-heap usage: 5% of 4 GiB]
+[        ] Using 22 worker leases.
+[        ] Now considering [C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android, C:\flutter\packages\flutter_tools\gradle] as hierarchies to watch
+[        ] Watching the file system is configured to be enabled if available
+[        ] File system watching is active
+[        ] Starting Build
+[        ] Now considering [C:\flutter\packages\flutter_tools\gradle, C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android] as hierarchies to watch
+[ +186 ms] > Configure project :gradle
+[        ] Evaluating project ':gradle' using build file 'C:\flutter\packages\flutter_tools\gradle\build.gradle.kts'.
+[        ] Resolved plugin [id: 'org.gradle.java-gradle-plugin']
+[        ] Resolved plugin [id: 'org.gradle.groovy']
+[        ] Resolved plugin [id: 'org.gradle.kotlin.kotlin-dsl', version: '5.2.0']
+[        ] Resolved plugin [id: 'org.jetbrains.kotlin.jvm', version: '1.9.20']
+[        ] Using Kotlin Gradle Plugin gradle85 variant
+[        ] kotlin scripting plugin: created the scripting discovery configuration: kotlinScriptDef
+[        ] kotlin scripting plugin: created the scripting discovery configuration: testKotlinScriptDef
+[        ] file or directory 'C:\flutter\packages\flutter_tools\gradle\src\main\java', not found
+[        ] Resolved plugin [id: 'dev.flutter.flutter-plugin-loader', version: '1.0.0']
+[        ] Resolved plugin [id: 'com.android.application', version: '8.11.1', apply: false]
+[        ] Resolved plugin [id: 'org.jetbrains.kotlin.android', version: '2.2.20', apply: false]
+[        ] Resolve mutations for :gradle:checkKotlinGradlePluginConfigurationErrors (Thread[#2015,Execution worker,5,main]) started.
+[        ] :gradle:checkKotlinGradlePluginConfigurationErrors (Thread[#2015,Execution worker,5,main]) started.
+[        ] > Task :gradle:checkKotlinGradlePluginConfigurationErrors SKIPPED
+[        ] Skipping task ':gradle:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+[        ] Resolve mutations for :gradle:compileKotlin (Thread[#2015,Execution worker,5,main]) started.
+[        ] :gradle:compileKotlin (Thread[#2014,included builds,5,main]) started.
+[ +107 ms] > Task :gradle:compileKotlin UP-TO-DATE
+[        ] Caching disabled for task ':gradle:compileKotlin' because:
+[        ]   Build cache is disabled
+[        ] Skipping task ':gradle:compileKotlin' as it is up-to-date.
+[        ] Resolve mutations for :gradle:compileJava (Thread[#2014,included builds,5,main]) started.
+[        ] :gradle:compileJava (Thread[#2014,included builds,5,main]) started.
+[        ] > Task :gradle:compileJava NO-SOURCE
+[        ] Skipping task ':gradle:compileJava' as it has no source files and no previous output files.
+[        ] Resolve mutations for :gradle:compileGroovy (Thread[#2022,Execution worker Thread 8,5,main]) started.
+[        ] :gradle:compileGroovy (Thread[#2022,Execution worker Thread 8,5,main]) started.
+[        ] > Task :gradle:compileGroovy NO-SOURCE
+[        ] Skipping task ':gradle:compileGroovy' as it has no source files and no previous output files.
+[        ] Resolve mutations for :gradle:pluginDescriptors (Thread[#2022,Execution worker Thread 8,5,main]) started.
+[        ] :gradle:pluginDescriptors (Thread[#2022,Execution worker Thread 8,5,main]) started.
+[        ] > Task :gradle:pluginDescriptors UP-TO-DATE
+[        ] Caching disabled for task ':gradle:pluginDescriptors' because:
+[        ]   Build cache is disabled
+[        ]   Not worth caching
+[        ] Skipping task ':gradle:pluginDescriptors' as it is up-to-date.
+[        ] Resolve mutations for :gradle:processResources (Thread[#2022,Execution worker Thread 8,5,main]) started.
+[        ] :gradle:processResources (Thread[#2022,Execution worker Thread 8,5,main]) started.
+[        ] > Task :gradle:processResources UP-TO-DATE
+[        ] Caching disabled for task ':gradle:processResources' because:
+[        ]   Build cache is disabled
+[        ]   Not worth caching
+[        ] Skipping task ':gradle:processResources' as it is up-to-date.
+[        ] Resolve mutations for :gradle:classes (Thread[#2022,Execution worker Thread 8,5,main]) started.
+[        ] :gradle:classes (Thread[#2032,Execution worker Thread 17,5,main]) started.
+[        ] > Task :gradle:classes UP-TO-DATE
+[        ] Skipping task ':gradle:classes' as it has no actions.
+[        ] Resolve mutations for :gradle:jar (Thread[#2034,Execution worker Thread 19,5,main]) started.
+[        ] :gradle:jar (Thread[#2034,Execution worker Thread 19,5,main]) started.
+[        ] > Task :gradle:jar UP-TO-DATE
+[        ] Caching disabled for task ':gradle:jar' because:
+[        ]   Build cache is disabled
+[        ]   Not worth caching
+[        ] Skipping task ':gradle:jar' as it is up-to-date.
+[  +87 ms] Settings evaluated using settings file 'C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android\settings.gradle.kts'.
+[        ] Projects loaded. Root project using build file 'C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android\build.gradle.kts'.
+[        ] Included projects: [root project 'android', project ':app', project ':connectivity_plus', project ':flutter_plugin_android_lifecycle', project ':flutter_secure_storage', project ':geolocator_android', project ':image_picker_android', project ':jni', project ':jni_flutter', project ':razorpay_flutter', project ':sensors_plus', project ':shared_preferences_android']
+[ +204 ms] > Configure project :app
+[   +1 ms] Evaluating project ':app' using build file 'C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android\app\build.gradle.kts'.
+[        ] Resolved plugin [id: 'com.android.application']
+[        ] Resolved plugin [id: 'kotlin-android']
+[        ] Resolved plugin [id: 'dev.flutter.flutter-gradle-plugin']
+[        ] Using default execution profile
+[        ] Build b2f40871-1269-4e33-a4bf-93e08876d1aa is started
+[        ] Using Kotlin Gradle Plugin gradle813 variant
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[   +1 ms] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] > Configure project :
+[        ] Evaluating root project 'android' using build file 'C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\android\build.gradle.kts'.
+[  +76 ms] > Configure project :connectivity_plus
+[        ] Evaluating project ':connectivity_plus' using build file 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\connectivity_plus-6.1.5\android\build.gradle'.
+[        ] Using default execution profile
+[ +108 ms] > Configure project :flutter_plugin_android_lifecycle
+[        ] Evaluating project ':flutter_plugin_android_lifecycle' using build file 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.34\android\build.gradle.kts'.
+[        ] Resolved plugin [id: 'com.android.library']
+[        ] Using default execution profile
+[  +94 ms] > Configure project :flutter_secure_storage
+[        ] Evaluating project ':flutter_secure_storage' using build file 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage-9.2.4\android\build.gradle'.
+[        ] Using default execution profile
+[  +90 ms] > Configure project :geolocator_android
+[        ] Evaluating project ':geolocator_android' using build file 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.2\android\build.gradle'.
+[        ] Using default execution profile
+[ +109 ms] > Configure project :image_picker_android
+[        ] Evaluating project ':image_picker_android' using build file 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.13+16\android\build.gradle.kts'.
+[        ] Resolved plugin [id: 'com.android.library']
+[        ] Using default execution profile
+[  +93 ms] > Configure project :jni
+[        ] Evaluating project ':jni' using build file 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\jni-1.0.0\android\build.gradle'.
+[        ] Using default execution profile
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] C/C++: android.ndkVersion from module build.gradle is [28.2.13676358]
+[        ] C/C++: android.ndkPath from module build.gradle is not set
+[        ] C/C++: ndk.dir in local.properties is not set
+[        ] C/C++: Not considering ANDROID_NDK_HOME because support was removed after deprecation period.
+[        ] C/C++: sdkFolder is C:\Android\sdk
+[        ] > Configure project :jni_flutter
+[        ] Evaluating project ':jni_flutter' using build file 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\jni_flutter-1.0.1\android\build.gradle'.
+[        ] Using default execution profile
+[  +96 ms] > Configure project :razorpay_flutter
+[        ] Evaluating project ':razorpay_flutter' using build file 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\razorpay_flutter-1.4.4\android\build.gradle'.
+[        ] Using default execution profile
+[ +188 ms] > Configure project :sensors_plus
+[        ] Evaluating project ':sensors_plus' using build file 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\sensors_plus-6.1.2\android\build.gradle'.
+[        ] Using default execution profile
+[        ] Using Kotlin Gradle Plugin gradle813 variant
+[ +108 ms] > Configure project :shared_preferences_android
+[        ] Evaluating project ':shared_preferences_android' using build file 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.23\android\build.gradle.kts'.
+[        ] Resolved plugin [id: 'com.android.library']
+[        ] Resolved plugin [id: 'kotlin-android']
+[        ] Using default execution profile
+[        ] Using Kotlin Gradle Plugin gradle813 variant
+[        ] All projects evaluated.
+[        ] Task name matched 'assembleDebug'
+[        ] Selected primary task 'assembleDebug' from project :
+[        ] Adding -Xuse-inline-scopes-numbers Kotlin compiler flag for task :app:compileDebugKotlin
+[ +296 ms] file or directory 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\razorpay_flutter-1.4.4\android\libs', not found
+[        ] file or directory 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\razorpay_flutter-1.4.4\android\libs', not found
+[        ] file or directory 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\razorpay_flutter-1.4.4\android\libs', not found
+[        ] file or directory 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\razorpay_flutter-1.4.4\android\libs', not found
+[   +4 ms] Tasks to be executed: [task ':app:DebugMinSdkCheck', task ':app:preBuild', task ':app:preDebugBuild', task ':app:mergeDebugNativeDebugMetadata', task ':app:checkKotlinGradlePluginConfigurationErrors', task ':app:compileFlutterBuildDebug', task ':app:packJniLibsflutterBuildDebug', task ':connectivity_plus:preBuild', task ':connectivity_plus:preDebugBuild', task ':connectivity_plus:writeDebugAarMetadata', task ':flutter_plugin_android_lifecycle:preBuild', task ':flutter_plugin_android_lifecycle:preDebugBuild', task ':flutter_plugin_android_lifecycle:writeDebugAarMetadata', task ':flutter_secure_storage:preBuild', task ':flutter_secure_storage:preDebugBuild', task ':flutter_secure_storage:writeDebugAarMetadata', task ':geolocator_android:preBuild', task ':geolocator_android:preDebugBuild', task ':geolocator_android:writeDebugAarMetadata', task ':image_picker_android:preBuild', task ':image_picker_android:preDebugBuild', task ':image_picker_android:writeDebugAarMetadata', task ':jni:preBuild', task ':jni:preDebugBuild', task ':jni:writeDebugAarMetadata', task ':jni_flutter:preBuild', task ':jni_flutter:preDebugBuild', task ':jni_flutter:writeDebugAarMetadata', task ':razorpay_flutter:preBuild', task ':razorpay_flutter:preDebugBuild', task ':razorpay_flutter:writeDebugAarMetadata', task ':sensors_plus:preBuild', task ':sensors_plus:preDebugBuild', task ':sensors_plus:writeDebugAarMetadata', task ':shared_preferences_android:preBuild', task ':shared_preferences_android:preDebugBuild', task ':shared_preferences_android:writeDebugAarMetadata', task ':app:checkDebugAarMetadata', task ':app:cleanMergeDebugAssets', task ':app:mergeDebugShaders', task ':app:compileDebugShaders', task ':app:generateDebugAssets', task ':connectivity_plus:mergeDebugShaders', task ':connectivity_plus:compileDebugShaders', task ':connectivity_plus:generateDebugAssets', task ':connectivity_plus:mergeDebugAssets', task ':flutter_plugin_android_lifecycle:mergeDebugShaders', task ':flutter_plugin_android_lifecycle:compileDebugShaders', task ':flutter_plugin_android_lifecycle:generateDebugAssets', task ':flutter_plugin_android_lifecycle:mergeDebugAssets', task ':flutter_secure_storage:mergeDebugShaders', task ':flutter_secure_storage:compileDebugShaders', task ':flutter_secure_storage:generateDebugAssets', task ':flutter_secure_storage:mergeDebugAssets', task ':geolocator_android:mergeDebugShaders', task ':geolocator_android:compileDebugShaders', task ':geolocator_android:generateDebugAssets', task ':geolocator_android:mergeDebugAssets', task ':image_picker_android:mergeDebugShaders', task ':image_picker_android:compileDebugShaders', task ':image_picker_android:generateDebugAssets', task ':image_picker_android:mergeDebugAssets', task ':jni:mergeDebugShaders', task ':jni:compileDebugShaders', task ':jni:generateDebugAssets', task ':jni:mergeDebugAssets', task ':jni_flutter:mergeDebugShaders', task ':jni_flutter:compileDebugShaders', task ':jni_flutter:generateDebugAssets', task ':jni_flutter:mergeDebugAssets', task ':razorpay_flutter:mergeDebugShaders', task ':razorpay_flutter:compileDebugShaders', task ':razorpay_flutter:generateDebugAssets', task ':razorpay_flutter:mergeDebugAssets', task ':sensors_plus:mergeDebugShaders', task ':sensors_plus:compileDebugShaders', task ':sensors_plus:generateDebugAssets', task ':sensors_plus:mergeDebugAssets', task ':shared_preferences_android:mergeDebugShaders', task ':shared_preferences_android:compileDebugShaders', task ':shared_preferences_android:generateDebugAssets', task ':shared_preferences_android:mergeDebugAssets', task ':app:mergeDebugAssets', task ':app:copyFlutterAssetsDebug', task ':app:generateDebugResValues', task ':connectivity_plus:generateDebugResValues', task ':connectivity_plus:generateDebugResources', task ':connectivity_plus:packageDebugResources', task ':flutter_plugin_android_lifecycle:generateDebugResValues', task ':flutter_plugin_android_lifecycle:generateDebugResources', task ':flutter_plugin_android_lifecycle:packageDebugResources', task ':flutter_secure_storage:generateDebugResValues', task ':flutter_secure_storage:generateDebugResources', task ':flutter_secure_storage:packageDebugResources', task ':geolocator_android:generateDebugResValues', task ':geolocator_android:generateDebugResources', task ':geolocator_android:packageDebugResources', task ':image_picker_android:generateDebugResValues', task ':image_picker_android:generateDebugResources', task ':image_picker_android:packageDebugResources', task ':jni:generateDebugResValues', task ':jni:generateDebugResources', task ':jni:packageDebugResources', task ':jni_flutter:generateDebugResValues', task ':jni_flutter:generateDebugResources', task ':jni_flutter:packageDebugResources', task ':razorpay_flutter:generateDebugResValues', task ':razorpay_flutter:generateDebugResources', task ':razorpay_flutter:packageDebugResources', task ':sensors_plus:generateDebugResValues', task ':sensors_plus:generateDebugResources', task ':sensors_plus:packageDebugResources', task ':shared_preferences_android:generateDebugResValues', task ':shared_preferences_android:generateDebugResources', task ':shared_preferences_android:packageDebugResources', task ':app:mapDebugSourceSetPaths', task ':app:generateDebugResources', task ':app:mergeDebugResources', task ':app:packageDebugResources', task ':app:parseDebugLocalResources', task ':app:createDebugCompatibleScreenManifests', task ':app:extractDeepLinksDebug', task ':connectivity_plus:extractDeepLinksDebug', task ':connectivity_plus:processDebugManifest', task ':flutter_plugin_android_lifecycle:extractDeepLinksDebug', task ':flutter_plugin_android_lifecycle:processDebugManifest', task ':flutter_secure_storage:extractDeepLinksDebug', task ':flutter_secure_storage:processDebugManifest', task ':geolocator_android:extractDeepLinksDebug', task ':geolocator_android:processDebugManifest', task ':image_picker_android:extractDeepLinksDebug', task ':image_picker_android:processDebugManifest', task ':jni:extractDeepLinksDebug', task ':jni:processDebugManifest', task ':jni_flutter:extractDeepLinksDebug', task ':jni_flutter:processDebugManifest', task ':razorpay_flutter:extractDeepLinksDebug', task ':razorpay_flutter:processDebugManifest', task ':sensors_plus:extractDeepLinksDebug', task ':sensors_plus:processDebugManifest', task ':shared_preferences_android:extractDeepLinksDebug', task ':shared_preferences_android:processDebugManifest', task ':app:processDebugMainManifest', task ':app:outputDebugAppLinkSettings', task ':app:processDebugManifest', task ':app:processDebugManifestForPackage', task ':connectivity_plus:compileDebugLibraryResources', task ':connectivity_plus:parseDebugLocalResources', task ':connectivity_plus:generateDebugRFile', task ':flutter_plugin_android_lifecycle:compileDebugLibraryResources', task ':flutter_plugin_android_lifecycle:parseDebugLocalResources', task ':flutter_plugin_android_lifecycle:generateDebugRFile', task ':flutter_secure_storage:compileDebugLibraryResources', task ':flutter_secure_storage:parseDebugLocalResources', task ':flutter_secure_storage:generateDebugRFile', task ':geolocator_android:compileDebugLibraryResources', task ':geolocator_android:parseDebugLocalResources', task ':geolocator_android:generateDebugRFile', task ':image_picker_android:compileDebugLibraryResources', task ':image_picker_android:parseDebugLocalResources', task ':image_picker_android:generateDebugRFile', task ':jni:compileDebugLibraryResources', task ':jni:parseDebugLocalResources', task ':jni:generateDebugRFile', task ':jni_flutter:compileDebugLibraryResources', task ':jni_flutter:parseDebugLocalResources', task ':jni_flutter:generateDebugRFile', task ':razorpay_flutter:compileDebugLibraryResources', task ':razorpay_flutter:parseDebugLocalResources', task ':razorpay_flutter:generateDebugRFile', task ':sensors_plus:compileDebugLibraryResources', task ':sensors_plus:parseDebugLocalResources', task ':sensors_plus:generateDebugRFile', task ':shared_preferences_android:compileDebugLibraryResources', task ':shared_preferences_android:parseDebugLocalResources', task ':shared_preferences_android:generateDebugRFile', task ':app:processDebugResources', task ':connectivity_plus:javaPreCompileDebug', task ':connectivity_plus:compileDebugJavaWithJavac', task ':connectivity_plus:bundleLibCompileToJarDebug', task ':flutter_plugin_android_lifecycle:javaPreCompileDebug', task ':flutter_plugin_android_lifecycle:compileDebugJavaWithJavac', task ':flutter_plugin_android_lifecycle:bundleLibCompileToJarDebug', task ':flutter_secure_storage:generateDebugBuildConfig', task ':flutter_secure_storage:javaPreCompileDebug', task ':flutter_secure_storage:compileDebugJavaWithJavac', task ':flutter_secure_storage:bundleLibCompileToJarDebug', task ':geolocator_android:javaPreCompileDebug', task ':geolocator_android:compileDebugJavaWithJavac', task ':geolocator_android:bundleLibCompileToJarDebug', task ':image_picker_android:javaPreCompileDebug', task ':image_picker_android:compileDebugJavaWithJavac', task ':image_picker_android:bundleLibCompileToJarDebug', task ':jni:javaPreCompileDebug', task ':jni:compileDebugJavaWithJavac', task ':jni:bundleLibCompileToJarDebug', task ':jni_flutter:javaPreCompileDebug', task ':jni_flutter:compileDebugJavaWithJavac', task ':jni_flutter:bundleLibCompileToJarDebug', task ':razorpay_flutter:javaPreCompileDebug', task ':razorpay_flutter:compileDebugJavaWithJavac', task ':razorpay_flutter:bundleLibCompileToJarDebug', task ':sensors_plus:checkKotlinGradlePluginConfigurationErrors', task ':sensors_plus:compileDebugKotlin', task ':sensors_plus:javaPreCompileDebug', task ':sensors_plus:compileDebugJavaWithJavac', task ':sensors_plus:bundleLibCompileToJarDebug', task ':shared_preferences_android:checkKotlinGradlePluginConfigurationErrors', task ':shared_preferences_android:compileDebugKotlin', task ':shared_preferences_android:javaPreCompileDebug', task ':shared_preferences_android:compileDebugJavaWithJavac', task ':shared_preferences_android:bundleLibCompileToJarDebug', task ':app:compileDebugKotlin', task ':app:javaPreCompileDebug', task ':app:compileDebugJavaWithJavac', task ':app:compressDebugAssets', task ':connectivity_plus:bundleLibRuntimeToJarDebug', task ':image_picker_android:bundleLibRuntimeToJarDebug', task ':flutter_plugin_android_lifecycle:bundleLibRuntimeToJarDebug', task ':flutter_secure_storage:bundleLibRuntimeToJarDebug', task ':geolocator_android:bundleLibRuntimeToJarDebug', task ':jni_flutter:bundleLibRuntimeToJarDebug', task ':jni:bundleLibRuntimeToJarDebug', task ':razorpay_flutter:bundleLibRuntimeToJarDebug', task ':sensors_plus:bundleLibRuntimeToJarDebug', task ':shared_preferences_android:bundleLibRuntimeToJarDebug', task ':app:desugarDebugFileDependencies', task ':app:dexBuilderDebug', task ':app:mergeDebugGlobalSynthetics', task ':app:processDebugJavaRes', task ':connectivity_plus:processDebugJavaRes', task ':flutter_plugin_android_lifecycle:processDebugJavaRes', task ':flutter_secure_storage:processDebugJavaRes', task ':geolocator_android:processDebugJavaRes', task ':image_picker_android:processDebugJavaRes', task ':jni:processDebugJavaRes', task ':jni_flutter:processDebugJavaRes', task ':razorpay_flutter:processDebugJavaRes', task ':sensors_plus:processDebugJavaRes', task ':shared_preferences_android:processDebugJavaRes', task ':app:mergeDebugJavaResource', task ':app:checkDebugDuplicateClasses', task ':app:mergeExtDexDebug', task ':connectivity_plus:bundleLibRuntimeToDirDebug', task ':image_picker_android:bundleLibRuntimeToDirDebug', task ':flutter_plugin_android_lifecycle:bundleLibRuntimeToDirDebug', task ':flutter_secure_storage:bundleLibRuntimeToDirDebug', task ':geolocator_android:bundleLibRuntimeToDirDebug', task ':jni_flutter:bundleLibRuntimeToDirDebug', task ':jni:bundleLibRuntimeToDirDebug', task ':razorpay_flutter:bundleLibRuntimeToDirDebug', task ':sensors_plus:bundleLibRuntimeToDirDebug', task ':shared_preferences_android:bundleLibRuntimeToDirDebug', task ':app:mergeLibDexDebug', task ':app:mergeProjectDexDebug', task ':app:configureCMakeDebug[arm64-v8a]', task ':app:buildCMakeDebug[arm64-v8a]', task ':app:configureCMakeDebug[armeabi-v7a]', task ':app:buildCMakeDebug[armeabi-v7a]', task ':app:configureCMakeDebug[x86_64]', task ':app:buildCMakeDebug[x86_64]', task ':app:mergeDebugJniLibFolders', task ':connectivity_plus:mergeDebugJniLibFolders', task ':connectivity_plus:mergeDebugNativeLibs', task ':connectivity_plus:copyDebugJniLibsProjectOnly', task ':flutter_plugin_android_lifecycle:mergeDebugJniLibFolders', task ':flutter_plugin_android_lifecycle:mergeDebugNativeLibs', task ':flutter_plugin_android_lifecycle:copyDebugJniLibsProjectOnly', task ':flutter_secure_storage:mergeDebugJniLibFolders', task ':flutter_secure_storage:mergeDebugNativeLibs', task ':flutter_secure_storage:copyDebugJniLibsProjectOnly', task ':geolocator_android:mergeDebugJniLibFolders', task ':geolocator_android:mergeDebugNativeLibs', task ':geolocator_android:copyDebugJniLibsProjectOnly', task ':image_picker_android:mergeDebugJniLibFolders', task ':image_picker_android:mergeDebugNativeLibs', task ':image_picker_android:copyDebugJniLibsProjectOnly', task ':jni:preProfileBuild', task ':jni:configureCMakeDebug[arm64-v8a]', task ':jni:buildCMakeDebug[arm64-v8a]', task ':jni:configureCMakeDebug[armeabi-v7a]', task ':jni:buildCMakeDebug[armeabi-v7a]', task ':jni:configureCMakeDebug[x86]', task ':jni:buildCMakeDebug[x86]', task ':jni:configureCMakeDebug[x86_64]', task ':jni:buildCMakeDebug[x86_64]', task ':jni:mergeDebugJniLibFolders', task ':jni:mergeDebugNativeLibs', task ':jni:copyDebugJniLibsProjectOnly', task ':jni_flutter:mergeDebugJniLibFolders', task ':jni_flutter:mergeDebugNativeLibs', task ':jni_flutter:copyDebugJniLibsProjectOnly', task ':razorpay_flutter:mergeDebugJniLibFolders', task ':razorpay_flutter:mergeDebugNativeLibs', task ':razorpay_flutter:copyDebugJniLibsProjectOnly', task ':sensors_plus:mergeDebugJniLibFolders', task ':sensors_plus:mergeDebugNativeLibs', task ':sensors_plus:copyDebugJniLibsProjectOnly', task ':shared_preferences_android:mergeDebugJniLibFolders', task ':shared_preferences_android:mergeDebugNativeLibs', task ':shared_preferences_android:copyDebugJniLibsProjectOnly', task ':app:mergeDebugNativeLibs', task ':app:stripDebugDebugSymbols', task ':app:validateSigningDebug', task ':app:writeDebugAppMetadata', task ':app:writeDebugSigningConfigVersions', task ':app:packageDebug', task ':app:createDebugApkListingFileRedirect', task ':app:assembleDebug', task ':connectivity_plus:stripDebugDebugSymbols', task ':connectivity_plus:copyDebugJniLibsProjectAndLocalJars', task ':connectivity_plus:extractDebugAnnotations', task ':connectivity_plus:extractDeepLinksForAarDebug', task ':connectivity_plus:mergeDebugGeneratedProguardFiles', task ':connectivity_plus:mergeDebugConsumerProguardFiles', task ':connectivity_plus:prepareDebugArtProfile', task ':connectivity_plus:prepareLintJarForPublish', task ':connectivity_plus:mergeDebugJavaResource', task ':connectivity_plus:syncDebugLibJars', task ':connectivity_plus:bundleDebugAar', task ':connectivity_plus:assembleDebug', task ':flutter_plugin_android_lifecycle:stripDebugDebugSymbols', task ':flutter_plugin_android_lifecycle:copyDebugJniLibsProjectAndLocalJars', task ':flutter_plugin_android_lifecycle:extractDebugAnnotations', task ':flutter_plugin_android_lifecycle:extractDeepLinksForAarDebug', task ':flutter_plugin_android_lifecycle:mergeDebugGeneratedProguardFiles', task ':flutter_plugin_android_lifecycle:mergeDebugConsumerProguardFiles', task ':flutter_plugin_android_lifecycle:prepareDebugArtProfile', task ':flutter_plugin_android_lifecycle:prepareLintJarForPublish', task ':flutter_plugin_android_lifecycle:mergeDebugJavaResource', task ':flutter_plugin_android_lifecycle:syncDebugLibJars', task ':flutter_plugin_android_lifecycle:bundleDebugAar', task ':flutter_plugin_android_lifecycle:assembleDebug', task ':flutter_secure_storage:stripDebugDebugSymbols', task ':flutter_secure_storage:copyDebugJniLibsProjectAndLocalJars', task ':flutter_secure_storage:extractDebugAnnotations', task ':flutter_secure_storage:extractDeepLinksForAarDebug', task ':flutter_secure_storage:mergeDebugGeneratedProguardFiles', task ':flutter_secure_storage:mergeDebugConsumerProguardFiles', task ':flutter_secure_storage:prepareDebugArtProfile', task ':flutter_secure_storage:prepareLintJarForPublish', task ':flutter_secure_storage:mergeDebugJavaResource', task ':flutter_secure_storage:syncDebugLibJars', task ':flutter_secure_storage:bundleDebugAar', task ':flutter_secure_storage:assembleDebug', task ':geolocator_android:stripDebugDebugSymbols', task ':geolocator_android:copyDebugJniLibsProjectAndLocalJars', task ':geolocator_android:extractDebugAnnotations', task ':geolocator_android:extractDeepLinksForAarDebug', task ':geolocator_android:mergeDebugGeneratedProguardFiles', task ':geolocator_android:mergeDebugConsumerProguardFiles', task ':geolocator_android:prepareDebugArtProfile', task ':geolocator_android:prepareLintJarForPublish', task ':geolocator_android:mergeDebugJavaResource', task ':geolocator_android:syncDebugLibJars', task ':geolocator_android:bundleDebugAar', task ':geolocator_android:assembleDebug', task ':image_picker_android:stripDebugDebugSymbols', task ':image_picker_android:copyDebugJniLibsProjectAndLocalJars', task ':image_picker_android:extractDebugAnnotations', task ':image_picker_android:extractDeepLinksForAarDebug', task ':image_picker_android:mergeDebugGeneratedProguardFiles', task ':image_picker_android:mergeDebugConsumerProguardFiles', task ':image_picker_android:prepareDebugArtProfile', task ':image_picker_android:prepareLintJarForPublish', task ':image_picker_android:mergeDebugJavaResource', task ':image_picker_android:syncDebugLibJars', task ':image_picker_android:bundleDebugAar', task ':image_picker_android:assembleDebug', task ':jni:stripDebugDebugSymbols', task ':jni:copyDebugJniLibsProjectAndLocalJars', task ':jni:extractDebugAnnotations', task ':jni:extractDeepLinksForAarDebug', task ':jni:mergeDebugGeneratedProguardFiles', task ':jni:mergeDebugConsumerProguardFiles', task ':jni:prepareDebugArtProfile', task ':jni:prepareLintJarForPublish', task ':jni:mergeDebugJavaResource', task ':jni:syncDebugLibJars', task ':jni:bundleDebugAar', task ':jni:assembleDebug', task ':jni_flutter:stripDebugDebugSymbols', task ':jni_flutter:copyDebugJniLibsProjectAndLocalJars', task ':jni_flutter:extractDebugAnnotations', task ':jni_flutter:extractDeepLinksForAarDebug', task ':jni_flutter:mergeDebugGeneratedProguardFiles', task ':jni_flutter:mergeDebugConsumerProguardFiles', task ':jni_flutter:prepareDebugArtProfile', task ':jni_flutter:prepareLintJarForPublish', task ':jni_flutter:mergeDebugJavaResource', task ':jni_flutter:syncDebugLibJars', task ':jni_flutter:bundleDebugAar', task ':jni_flutter:assembleDebug', task ':razorpay_flutter:stripDebugDebugSymbols', task ':razorpay_flutter:copyDebugJniLibsProjectAndLocalJars', task ':razorpay_flutter:extractDebugAnnotations', task ':razorpay_flutter:extractDeepLinksForAarDebug', task ':razorpay_flutter:mergeDebugGeneratedProguardFiles', task ':razorpay_flutter:mergeDebugConsumerProguardFiles', task ':razorpay_flutter:prepareDebugArtProfile', task ':razorpay_flutter:prepareLintJarForPublish', task ':razorpay_flutter:mergeDebugJavaResource', task ':razorpay_flutter:syncDebugLibJars', task ':razorpay_flutter:bundleDebugAar', task ':razorpay_flutter:assembleDebug', task ':sensors_plus:stripDebugDebugSymbols', task ':sensors_plus:copyDebugJniLibsProjectAndLocalJars', task ':sensors_plus:extractDebugAnnotations', task ':sensors_plus:extractDeepLinksForAarDebug', task ':sensors_plus:mergeDebugGeneratedProguardFiles', task ':sensors_plus:mergeDebugConsumerProguardFiles', task ':sensors_plus:prepareDebugArtProfile', task ':sensors_plus:prepareLintJarForPublish', task ':sensors_plus:mergeDebugJavaResource', task ':sensors_plus:syncDebugLibJars', task ':sensors_plus:bundleDebugAar', task ':sensors_plus:assembleDebug', task ':shared_preferences_android:stripDebugDebugSymbols', task ':shared_preferences_android:copyDebugJniLibsProjectAndLocalJars', task ':shared_preferences_android:extractDebugAnnotations', task ':shared_preferences_android:extractDeepLinksForAarDebug', task ':shared_preferences_android:mergeDebugGeneratedProguardFiles', task ':shared_preferences_android:mergeDebugConsumerProguardFiles', task ':shared_preferences_android:prepareDebugArtProfile', task ':shared_preferences_android:prepareLintJarForPublish', task ':shared_preferences_android:mergeDebugJavaResource', task ':shared_preferences_android:syncDebugLibJars', task ':shared_preferences_android:bundleDebugAar', task ':shared_preferences_android:assembleDebug']
+[   +2 ms] Tasks that were excluded: []
+[        ] work action Parameters of IdentityTransform (Thread[#2035,Execution worker Thread 20,5,main]) started.
+[        ] work action Parameters of DexingNoClasspathTransform (Thread[#2035,Execution worker Thread 20,5,main]) started.
+[        ] work action Parameters of DexingOutputSplitTransform (Thread[#2026,Execution worker Thread 12,5,main]) started.
+[        ] work action Parameters of ClassesDirToClassesTransform (Thread[#2026,Execution worker Thread 12,5,main]) started.
+[        ] work action Parameters of DexingOutputSplitTransform (Thread[#2026,Execution worker Thread 12,5,main]) started.
+[        ] Resolve mutations for :app:DebugMinSdkCheck (Thread[#2026,Execution worker Thread 12,5,main]) started.
+[        ] :app:DebugMinSdkCheck (Thread[#2035,Execution worker Thread 20,5,main]) started.
+[        ] > Task :app:DebugMinSdkCheck
+[        ] Caching disabled for task ':app:DebugMinSdkCheck' because:
+[        ]   Build cache is disabled
+[        ] Task ':app:DebugMinSdkCheck' is not up-to-date because:
+[        ]   Task has not declared any outputs despite executing actions.
+[        ] Resolve mutations for :app:preBuild (Thread[#2035,Execution worker Thread 20,5,main]) started.
+[        ] :app:preBuild (Thread[#2035,Execution worker Thread 20,5,main]) started.
+[        ] > Task :app:preBuild UP-TO-DATE
+[        ] Skipping task ':app:preBuild' as it has no actions.
+[        ] Resolve mutations for :app:preDebugBuild (Thread[#2035,Execution worker Thread 20,5,main]) started.
+[        ] :app:preDebugBuild (Thread[#2020,Execution worker Thread 6,5,main]) started.
+[        ] > Task :app:preDebugBuild UP-TO-DATE
+[        ] Skipping task ':app:preDebugBuild' as it has no actions.
+[        ] Resolve mutations for :app:mergeDebugNativeDebugMetadata (Thread[#2020,Execution worker Thread 6,5,main]) started.
+[        ] :app:mergeDebugNativeDebugMetadata (Thread[#2020,Execution worker Thread 6,5,main]) started.
+[        ] > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+[        ] Skipping task ':app:mergeDebugNativeDebugMetadata' as it has no source files and no previous output files.
+[        ] Resolve mutations for :app:checkKotlinGradlePluginConfigurationErrors (Thread[#2020,Execution worker Thread 6,5,main]) started.
+[        ] :app:checkKotlinGradlePluginConfigurationErrors (Thread[#2020,Execution worker Thread 6,5,main]) started.
+[        ] > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+[        ] Skipping task ':app:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+[        ] Resolve mutations for :app:compileFlutterBuildDebug (Thread[#2020,Execution worker Thread 6,5,main]) started.
+[        ] :app:compileFlutterBuildDebug (Thread[#2020,Execution worker Thread 6,5,main]) started.
+[+1988 ms] > Task :app:compileFlutterBuildDebug
+[        ] Caching disabled for task ':app:compileFlutterBuildDebug' because:
+[        ]   Build cache is disabled
+[        ]   Caching has not been enabled for the task
+[        ] Task ':app:compileFlutterBuildDebug' is not up-to-date because:
+[        ]   Task has failed previously.
+[        ] Starting process 'command 'C:\flutter\bin\flutter.bat''. Working directory: C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield Command: C:\flutter\bin\flutter.bat --verbose assemble --no-version-check --depfile C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\build\app\intermediates\flutter\debug/flutter_build.d --output C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\build\app\intermediates\flutter\debug -dTargetFile=lib\main.dart -dTargetPlatform=android -dBuildMode=debug -dTrackWidgetCreation=true --DartDefines=RkxVVFRFUl9WRVJTSU9OPTMuNDEuNg==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049ZGI1MGUyMDE2OA==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NDI1Y2ZiNTRkMA==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMS40 -dFlavor= -dAndroidArchs=android-arm android-arm64 android-x64 -dMinSdkVersion=24 debug_android_application
+[        ] Successfully started process 'command 'C:\flutter\bin\flutter.bat''
+[+1495 ms] [ +496 ms] Artifact Instance of 'MaterialFonts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'GradleWrapper' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] [   +1 ms] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterSdk' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FontSubsetArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'PubDependencies' is not required, skipping update.
+[        ] [  +12 ms] Artifact Instance of 'AndroidGenSnapshotArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterEngineStamp' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[        ] [   +3 ms] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[  +88 ms] [  +77 ms] Artifact Instance of 'MaterialFonts' is not required, skipping update.
+[   +1 ms] [        ] Artifact Instance of 'GradleWrapper' is not required, skipping update.
+[        ] [   +2 ms] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterEngineStamp' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LegacyCanvasKitRemover' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterSdk' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'IosUsbArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'FontSubsetArtifacts' is not required, skipping update.
+[        ] [        ] Artifact Instance of 'PubDependencies' is not required, skipping update.
+[        ] [  +39 ms] Initializing file store
+[        ] [  +35 ms] dart_build: Starting due to {}
+[ +102 ms] [   +2 ms] Skipping target: gen_localizations
+[        ] [   +3 ms] gen_dart_plugin_registrant: Starting due to {InvalidatedReasonKind.inputChanged: The following inputs have updated contents: C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\package_config.json}
+[ +201 ms] [ +248 ms] Found plugin shared_preferences at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences-2.5.5\
+[        ] [   +8 ms] Found plugin shared_preferences_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_windows-2.4.1\
+[        ] [  +11 ms] Found plugin path_provider_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_windows-2.3.0\
+[        ] [  +18 ms] Building native assets for android_arm, android_arm64, android_x64.
+[  +93 ms] [  +31 ms] Found plugin shared_preferences_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_web-2.4.3\
+[        ] [   +5 ms] Found plugin shared_preferences_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_linux-2.4.1\
+[        ] [   +2 ms] Found plugin path_provider_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_linux-2.2.1\
+[        ] [   +3 ms] Found plugin shared_preferences_foundation at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_foundation-2.5.6\
+[        ] [  +21 ms] Found plugin shared_preferences_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.23\
+[        ] [   +3 ms] Found plugin sensors_plus at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\sensors_plus-6.1.2\
+[        ] [   +8 ms] Found plugin razorpay_flutter at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\razorpay_flutter-1.4.4\
+[        ] [   +6 ms] Running `C:\flutter\bin\cache\dart-sdk\bin\dart compile kernel '--packages=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\package_config.json' '--output=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\e2657bb7d7\hook.dill' '--depfile=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\e2657bb7d7\hook.dill.d' 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\objective_c-9.3.0\hook\build.dart'`.
+[  +92 ms] [  +28 ms] Found plugin image_picker at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker-1.2.1\
+[        ] [   +2 ms] Found plugin image_picker_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_windows-0.2.2\
+[        ] [  +10 ms] Found plugin file_selector_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_windows-0.9.3+5\
+[        ] [   +3 ms] Found plugin image_picker_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_macos-0.2.2+1\
+[        ] [   +2 ms] Found plugin file_selector_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_macos-0.9.5\
+[        ] [   +2 ms] Found plugin image_picker_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_linux-0.2.2\
+[        ] [   +2 ms] Found plugin file_selector_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\file_selector_linux-0.9.4\
+[        ] [   +2 ms] Found plugin image_picker_ios at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_ios-0.8.13+6\
+[        ] [   +2 ms] Found plugin image_picker_for_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_for_web-3.1.1\
+[        ] [   +2 ms] Found plugin image_picker_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.13+16\
+[        ] [   +2 ms] Found plugin flutter_plugin_android_lifecycle at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.34\
+[        ] [   +5 ms] Found plugin path_provider at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider-2.1.5\
+[        ] [   +1 ms] Found plugin path_provider_foundation at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_foundation-2.6.0\
+[        ] [  +16 ms] Found plugin path_provider_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_android-2.3.1\
+[        ] [   +2 ms] Found plugin jni_flutter at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\jni_flutter-1.0.1\
+[        ] [   +2 ms] Found plugin jni at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\jni-1.0.0\
+[        ] [   +5 ms] Found plugin geolocator at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator-12.0.0\
+[        ] [   +1 ms] Found plugin geolocator_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_windows-0.2.5\
+[        ] [   +3 ms] Found plugin geolocator_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_web-4.1.3\
+[        ] [   +1 ms] Found plugin geolocator_apple at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_apple-2.3.13\
+[        ] [   +2 ms] Found plugin geolocator_android at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.2\
+[        ] [   +6 ms] Found plugin flutter_secure_storage at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage-9.2.4\
+[        ] [   +2 ms] Found plugin flutter_secure_storage_windows at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_windows-3.1.2\
+[        ] [   +4 ms] Found plugin flutter_secure_storage_web at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_web-1.2.1\
+[ +106 ms] [   +3 ms] Found plugin flutter_secure_storage_macos at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_macos-3.1.3\
+[        ] [   +1 ms] Found plugin flutter_secure_storage_linux at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_secure_storage_linux-1.2.3\
+[        ] [  +27 ms] Found plugin connectivity_plus at C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\connectivity_plus-6.1.5\
+[        ] [  +33 ms] gen_dart_plugin_registrant: Complete
+[        ] [   +6 ms] kernel_snapshot_program: Starting due to {}
+[        ] [  +15 ms] C:\flutter\bin\cache\dart-sdk\bin\dartaotruntime.exe C:\flutter\bin\cache\dart-sdk\bin\snapshots\frontend_server_aot.dart.snapshot --sdk-root C:\flutter\bin\cache\artifacts\engine\common\flutter_patched_sdk/ --target=flutter --no-print-incremental-dependencies -DFLUTTER_VERSION=3.41.6 -DFLUTTER_CHANNEL=stable -DFLUTTER_GIT_URL=https://github.com/flutter/flutter.git -DFLUTTER_FRAMEWORK_REVISION=db50e20168 -DFLUTTER_ENGINE_REVISION=425cfb54d0 -DFLUTTER_DART_VERSION=3.11.4 -DFLUTTER_APP_FLAVOR= -Ddart.vm.profile=false -Ddart.vm.product=false --enable-asserts --track-widget-creation --no-link-platform --packages C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\package_config.json --output-dill C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\flutter_build\2e7db62eb8982a2a30c4d06fa8052a71\app.dill --depfile C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\flutter_build\2e7db62eb8982a2a30c4d06fa8052a71\kernel_snapshot_program.d --incremental --initialize-from-dill C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\flutter_build\2e7db62eb8982a2a30c4d06fa8052a71\app.dill --source file:///C:/Users/Trisha%20V%20P/OneDrive/Desktop/devtrails-gigshield/.dart_tool/flutter_build/dart_plugin_registrant.dart --source package:flutter/src/dart_plugin_registrant.dart -Dflutter.dart_plugin_registrant=file:///C:/Users/Trisha%20V%20P/OneDrive/Desktop/devtrails-gigshield/.dart_tool/flutter_build/dart_plugin_registrant.dart --verbosity=error package:gigshield/main.dart
+[+1796 ms] [+1810 ms] input.json contents:
+[        ]            {
+[        ]              "assets": {},
+[        ]              "config": {
+[        ]                "build_asset_types": [
+[        ]                  "code_assets/code"
+[        ]                ],
+[        ]                "extensions": {
+[        ]                  "code_assets": {
+[        ]                    "android": {
+[        ]                      "target_ndk_api": 24
+[        ]                    },
+[        ]                    "c_compiler": {
+[        ]                      "ar": "C:\\Android\\sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\llvm-ar.exe",
+[        ]                      "cc": "C:\\Android\\sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+[        ]                      "ld": "C:\\Android\\sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\ld.lld.exe"
+[        ]                    },
+[        ]                    "link_mode_preference": "dynamic",
+[        ]                    "target_architecture": "arm",
+[        ]                    "target_os": "android"
+[        ]                  }
+[        ]                },
+[        ]                "linking_enabled": false
+[        ]              },
+[        ]              "out_dir_shared": "C:\\Users\\Trisha V P\\OneDrive\\Desktop\\devtrails-gigshield\\.dart_tool\\hooks_runner\\shared\\objective_c\\build\\",
+[        ]              "out_file": "C:\\Users\\Trisha V P\\OneDrive\\Desktop\\devtrails-gigshield\\.dart_tool\\hooks_runner\\objective_c\\e2657bb7d7\\output.json",
+[        ]              "package_name": "objective_c",
+[        ]              "package_root": "C:\\Users\\Trisha V P\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\objective_c-9.3.0\\",
+[        ]              "user_defines": {}
+[        ]            }
+[        ] [   +8 ms] Running `(cd C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\objective_c-9.3.0\; PATH=C:\Program Files\Android\Android Studio\jbr\bin;C:\flutter\bin\;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\copilotCli;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\MATLAB\R2024b\bin;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\;C:\Users\Trisha V P\AppData\Local\Microsoft\WindowsApps;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files\cursor\resources\app\bin;C:\Program Files\Git\cmd;C:\Users\Trisha V P\OneDrive\Desktop\appdev\.venv\Scripts;C:\flutter\bin\;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\copilotCli;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\MATLAB\R2024b\bin;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\;C:\Users\Trisha V P\AppData\Local\Microsoft\WindowsApps;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop;C:\WINDOWS\system32;C:\WIN;c:\Users\Trisha V P\.vscode\extensions\ms-python.debugpy-2025.18.0-win32-x64\bundled\scripts\noConfigScripts;C:\flutter\bin\mingit\cmd;C:\flutter\bin\mingit\cmd PROGRAMDATA=C:\ProgramData SYSTEMDRIVE=C: SYSTEMROOT=C:\WINDOWS TEMP=C:\Users\TRISHA~1\AppData\Local\Temp TMP=C:\Users\TRISHA~1\AppData\Local\Temp USERPROFILE=C:\Users\Trisha V P WINDIR=C:\WINDOWS C:\flutter\bin\cache\dart-sdk\bin\dart '--packages=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\package_config.json' 'C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\e2657bb7d7\hook.dill' '--config=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\e2657bb7d7\input.json' )`.
+[ +400 ms] [ +354 ms] output.json contents:
+[        ]            {
+[        ]              "assets_for_linking": {},
+[        ]              "status": "success",
+[        ]              "timestamp": "2026-04-17 23:32:15.000"
+[        ]            }
+[  +91 ms] [  +73 ms] Running `C:\flutter\bin\cache\dart-sdk\bin\dart compile kernel '--packages=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\package_config.json' '--output=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\97f95f5943\hook.dill' '--depfile=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\97f95f5943\hook.dill.d' 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\objective_c-9.3.0\hook\build.dart'`.
+[+1608 ms] [+1674 ms] input.json contents:
+[        ]            {
+[        ]              "assets": {},
+[        ]              "config": {
+[        ]                "build_asset_types": [
+[        ]                  "code_assets/code"
+[        ]                ],
+[        ]                "extensions": {
+[        ]                  "code_assets": {
+[        ]                    "android": {
+[        ]                      "target_ndk_api": 24
+[        ]                    },
+[        ]                    "c_compiler": {
+[        ]                      "ar": "C:\\Android\\sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\llvm-ar.exe",
+[        ]                      "cc": "C:\\Android\\sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+[        ]                      "ld": "C:\\Android\\sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\ld.lld.exe"
+[        ]                    },
+[        ]                    "link_mode_preference": "dynamic",
+[        ]                    "target_architecture": "arm64",
+[        ]                    "target_os": "android"
+[        ]                  }
+[        ]                },
+[        ]                "linking_enabled": false
+[        ]              },
+[        ]              "out_dir_shared": "C:\\Users\\Trisha V P\\OneDrive\\Desktop\\devtrails-gigshield\\.dart_tool\\hooks_runner\\shared\\objective_c\\build\\",
+[        ]              "out_file": "C:\\Users\\Trisha V P\\OneDrive\\Desktop\\devtrails-gigshield\\.dart_tool\\hooks_runner\\objective_c\\97f95f5943\\output.json",
+[        ]              "package_name": "objective_c",
+[        ]              "package_root": "C:\\Users\\Trisha V P\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\objective_c-9.3.0\\",
+[        ]              "user_defines": {}
+[        ]            }
+[  +90 ms] [   +6 ms] Running `(cd C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\objective_c-9.3.0\; PATH=C:\Program Files\Android\Android Studio\jbr\bin;C:\flutter\bin\;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\copilotCli;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\MATLAB\R2024b\bin;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\;C:\Users\Trisha V P\AppData\Local\Microsoft\WindowsApps;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files\cursor\resources\app\bin;C:\Program Files\Git\cmd;C:\Users\Trisha V P\OneDrive\Desktop\appdev\.venv\Scripts;C:\flutter\bin\;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\copilotCli;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\MATLAB\R2024b\bin;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\;C:\Users\Trisha V P\AppData\Local\Microsoft\WindowsApps;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop;C:\WINDOWS\system32;C:\WIN;c:\Users\Trisha V P\.vscode\extensions\ms-python.debugpy-2025.18.0-win32-x64\bundled\scripts\noConfigScripts;C:\flutter\bin\mingit\cmd;C:\flutter\bin\mingit\cmd PROGRAMDATA=C:\ProgramData SYSTEMDRIVE=C: SYSTEMROOT=C:\WINDOWS TEMP=C:\Users\TRISHA~1\AppData\Local\Temp TMP=C:\Users\TRISHA~1\AppData\Local\Temp USERPROFILE=C:\Users\Trisha V P WINDIR=C:\WINDOWS C:\flutter\bin\cache\dart-sdk\bin\dart '--packages=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\package_config.json' 'C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\97f95f5943\hook.dill' '--config=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\97f95f5943\input.json' )`.
+[ +297 ms] [ +310 ms] output.json contents:
+[        ]            {
+[        ]              "assets_for_linking": {},
+[        ]              "status": "success",
+[        ]              "timestamp": "2026-04-17 23:32:17.000"
+[        ]            }
+[        ] [  +17 ms] Running `C:\flutter\bin\cache\dart-sdk\bin\dart compile kernel '--packages=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\package_config.json' '--output=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\f92530474f\hook.dill' '--depfile=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\f92530474f\hook.dill.d' 'C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\objective_c-9.3.0\hook\build.dart'`.
+[+1598 ms] [+1592 ms] input.json contents:
+[        ]            {
+[        ]              "assets": {},
+[        ]              "config": {
+[        ]                "build_asset_types": [
+[        ]                  "code_assets/code"
+[        ]                ],
+[        ]                "extensions": {
+[        ]                  "code_assets": {
+[        ]                    "android": {
+[        ]                      "target_ndk_api": 24
+[        ]                    },
+[        ]                    "c_compiler": {
+[        ]                      "ar": "C:\\Android\\sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\llvm-ar.exe",
+[        ]                      "cc": "C:\\Android\\sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+[        ]                      "ld": "C:\\Android\\sdk\\ndk\\28.2.13676358\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\ld.lld.exe"
+[        ]                    },
+[        ]                    "link_mode_preference": "dynamic",
+[        ]                    "target_architecture": "x64",
+[        ]                    "target_os": "android"
+[        ]                  }
+[        ]                },
+[        ]                "linking_enabled": false
+[        ]              },
+[        ]              "out_dir_shared": "C:\\Users\\Trisha V P\\OneDrive\\Desktop\\devtrails-gigshield\\.dart_tool\\hooks_runner\\shared\\objective_c\\build\\",
+[        ]              "out_file": "C:\\Users\\Trisha V P\\OneDrive\\Desktop\\devtrails-gigshield\\.dart_tool\\hooks_runner\\objective_c\\f92530474f\\output.json",
+[        ]              "package_name": "objective_c",
+[        ]              "package_root": "C:\\Users\\Trisha V P\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\objective_c-9.3.0\\",
+[        ]              "user_defines": {}
+[        ]            }
+[        ] [   +5 ms] Running `(cd C:\Users\Trisha V P\AppData\Local\Pub\Cache\hosted\pub.dev\objective_c-9.3.0\; PATH=C:\Program Files\Android\Android Studio\jbr\bin;C:\flutter\bin\;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\copilotCli;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\MATLAB\R2024b\bin;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\;C:\Users\Trisha V P\AppData\Local\Microsoft\WindowsApps;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files\cursor\resources\app\bin;C:\Program Files\Git\cmd;C:\Users\Trisha V P\OneDrive\Desktop\appdev\.venv\Scripts;C:\flutter\bin\;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;c:\Users\Trisha V P\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\copilotCli;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\MATLAB\R2024b\bin;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\Trisha V P\AppData\Local\Programs\Python\Python313\;C:\Users\Trisha V P\AppData\Local\Microsoft\WindowsApps;C:\Users\Trisha V P\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Trisha V P\OneDrive\Desktop\newlaptop;C:\WINDOWS\system32;C:\WIN;c:\Users\Trisha V P\.vscode\extensions\ms-python.debugpy-2025.18.0-win32-x64\bundled\scripts\noConfigScripts;C:\flutter\bin\mingit\cmd;C:\flutter\bin\mingit\cmd PROGRAMDATA=C:\ProgramData SYSTEMDRIVE=C: SYSTEMROOT=C:\WINDOWS TEMP=C:\Users\TRISHA~1\AppData\Local\Temp TMP=C:\Users\TRISHA~1\AppData\Local\Temp USERPROFILE=C:\Users\Trisha V P WINDIR=C:\WINDOWS C:\flutter\bin\cache\dart-sdk\bin\dart '--packages=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\package_config.json' 'C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\f92530474f\hook.dill' '--config=C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\hooks_runner\objective_c\f92530474f\input.json' )`.
+[ +291 ms] [ +301 ms] output.json contents:
+[        ]            {
+[        ]              "assets_for_linking": {},
+[        ]              "status": "success",
+[        ]              "timestamp": "2026-04-17 23:32:19.000"
+[        ]            }
+[        ] [   +4 ms] Building native assets for android_arm, android_arm64, android_x64 done.
+[        ] [   +5 ms] dart_build: Complete
+[        ] [  +10 ms] install_code_assets: Starting due to {}
+[        ] [   +6 ms] Writing native assets json to file:///C:/Users/Trisha%20V%20P/OneDrive/Desktop/devtrails-gigshield/.dart_tool/flutter_build/2e7db62eb8982a2a30c4d06fa8052a71/native_assets.json.
+[        ] [   +4 ms] Writing C:\Users\Trisha V P\OneDrive\Desktop\devtrails-gigshield\.dart_tool\flutter_build\2e7db62eb8982a2a30c4d06fa8052a71\native_assets.json done.
+[        ] [   +3 ms] install_code_assets: Complete
+[+2806 ms] [+2785 ms] lib/screens/subscription_payment_screen.dart:23:36: Error: Member not found: 'pageBackground'.
+[   +1 ms] [   +2 ms]         backgroundColor: AppColors.pageBackground,
+[        ] [        ]                                    ^^^^^^^^^^^^^^
+[        ] [        ] lib/screens/subscription_payment_screen.dart:27:34: Error: Member not found: 'pageBackground'.
+[        ] [        ]       backgroundColor: AppColors.pageBackground,
+[        ] [        ]                                  ^^^^^^^^^^^^^^
+[+8994 ms] [+8995 ms] Persisting file store
+[        ] [   +3 ms] Done persisting file store
+[        ] [   +3 ms] Target kernel_snapshot_program failed: Exception
+[        ]            #0      KernelSnapshot.build (package:flutter_tools/src/build_system/targets/common.dart:289:7)
+[        ]            <asynchronous suspension>
+[        ]            #1      _BuildInstance._invokeInternal (package:flutter_tools/src/build_system/build_system.dart:937:9)
+[        ]            <asynchronous suspension>
+[        ]            #2      Future.wait.<anonymous closure> (dart:async/future.dart:546:21)
+[        ]            <asynchronous suspension>
+[        ]            #3      _BuildInstance.invokeTarget (package:flutter_tools/src/build_system/build_system.dart:875:32)
+[        ]            <asynchronous suspension>
+[        ]            #4      FlutterBuildSystem.build (package:flutter_tools/src/build_system/build_system.dart:684:16)
+[        ]            <asynchronous suspension>
+[        ]            #5      AssembleCommand.runCommand (package:flutter_tools/src/commands/assemble.dart:365:32)
+[        ]            <asynchronous suspension>
+[        ]            #6      FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1590:27)
+[        ]            <asynchronous suspension>
+[        ]            #7      AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+[        ]            <asynchronous suspension>
+[        ]            #8      CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+[        ]            <asynchronous suspension>
+[        ]            #9      FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:496:9)
+[        ]            <asynchronous suspension>
+[        ]            #10     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+[        ]            <asynchronous suspension>
+[        ]            #11     FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:431:5)
+[        ]            <asynchronous suspension>
+[        ]            #12     FlutterCommandRunner.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:307:33)
+[        ]            <asynchronous suspension>
+[        ]            #13     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:104:11)
+[        ]            <asynchronous suspension>
+[        ]            #14     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+[        ]            <asynchronous suspension>
+[        ]            #15     main (package:flutter_tools/executable.dart:103:3)
+[        ]            <asynchronous suspension>
+[        ] [   +7 ms] "flutter assemble" took 18,744ms.
+[ +198 ms] [ +163 ms] 
+[        ]            #0      throwToolExit (package:flutter_tools/src/base/common.dart:34:3)
+[        ]            #1      AssembleCommand.runCommand (package:flutter_tools/src/commands/assemble.dart:383:7)
+[        ]            <asynchronous suspension>
+[        ]            #2      FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1590:27)
+[        ]            <asynchronous suspension>
+[        ]            #3      AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+[        ]            <asynchronous suspension>
+[        ]            #4      CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+[        ]            <asynchronous suspension>
+[        ]            #5      FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:496:9)
+[        ]            <asynchronous suspension>
+[        ]            #6      AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+[        ]            <asynchronous suspension>
+[        ]            #7      FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:431:5)
+[        ]            <asynchronous suspension>
+[        ]            #8      FlutterCommandRunner.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:307:33)
+[        ]            <asynchronous suspension>
+[        ]            #9      run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:104:11)
+[        ]            <asynchronous suspension>
+[        ]            #10     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+[        ]            <asynchronous suspension>
+[        ]            #11     main (package:flutter_tools/executable.dart:103:3)
+[        ]            <asynchronous suspension>
+[        ] [        ] Running 1 shutdown hook
+[        ] [   +1 ms] Shutdown hooks complete
+[  +90 ms] [ +110 ms] exiting with code 1
+[ +107 ms] > Task :app:compileFlutterBuildDebug FAILED
+[  +93 ms] Build b2f40871-1269-4e33-a4bf-93e08876d1aa is closed
+[        ] [Incubating] Problems report is available at: file:///C:/Users/Trisha%20V%20P/OneDrive/Desktop/devtrails-gigshield/build/reports/problems/problems-report.html
+[        ] FAILURE: Build failed with an exception.
+[        ] * What went wrong:
+[        ] Execution failed for task ':app:compileFlutterBuildDebug'.
+[        ] > Process 'command 'C:\flutter\bin\flutter.bat'' finished with non-zero exit value 1
+[        ] * Try:
+[        ] > Run with --debug option to get more log output.
+[        ] > Run with --scan to get full insights.
+[        ] > Get more help at https://help.gradle.org.
+[        ] * Exception is:
+[        ] org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:compileFlutterBuildDebug'.
+[        ] 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.lambda$executeIfValid$1(ExecuteActionsTaskExecuter.java:130)
+[        ] 	at org.gradle.internal.Try$Failure.ifSuccessfulOrElse(Try.java:293)
+[        ] 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:128)
+[        ] 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
+[        ] 	at org.gradle.api.internal.tasks.execution.ProblemsTaskPathTrackingTaskExecuter.execute(ProblemsTaskPathTrackingTaskExecuter.java:41)
+[        ] 	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+[        ] 	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+[        ] 	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+[        ] 	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+[        ] 	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+[        ] 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+[        ] 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+[        ] 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+[        ] 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+[        ] 	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+[        ] 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+[        ] 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+[        ] 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+[        ] 	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+[        ] 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+[        ] 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+[        ] 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
+[        ] 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+[        ] 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+[        ] 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
+[        ] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[        ] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[        ] 	at java.base/java.lang.Thread.run(Unknown Source)
+[        ] Caused by: org.gradle.process.internal.ExecException: Process 'command 'C:\flutter\bin\flutter.bat'' finished with non-zero exit value 1
+[        ] 	at org.gradle.process.internal.DefaultExecHandle$ExecResultImpl.assertNormalExitValue(DefaultExecHandle.java:442)
+[        ] 	at org.gradle.process.internal.DefaultExecAction.execute(DefaultExecAction.java:49)
+[        ] 	at org.gradle.process.internal.DefaultExecActionFactory.exec(DefaultExecActionFactory.java:216)
+[        ] 	at org.gradle.process.internal.DefaultExecOperations.exec(DefaultExecOperations.java:37)
+[        ] 	at com.flutter.gradle.tasks.BaseFlutterTaskHelper.buildBundle(BaseFlutterTaskHelper.kt:159)
+[        ] 	at com.flutter.gradle.tasks.BaseFlutterTask.buildBundle(BaseFlutterTask.kt:143)
+[        ] 	at com.flutter.gradle.tasks.FlutterTaskHelper.build$gradle(FlutterTaskHelper.kt:90)
+[        ] 	at com.flutter.gradle.tasks.FlutterTask.build(FlutterTask.kt:51)
+[        ] 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(Unknown Source)
+[        ] 	at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+[        ] 	at org.gradle.internal.reflect.JavaMethod.invoke(JavaMethod.java:125)
+[        ] 	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.doExecute(StandardTaskAction.java:58)
+[        ] 	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:51)
+[        ] 	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:29)
+[        ] 	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:244)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:30)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:27)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:48)
+[        ] 	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:229)
+[        ] 	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:212)
+[        ] 	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:195)
+[        ] 	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:162)
+[        ] 	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+[        ] 	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+[        ] 	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+[        ] 	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+[        ] 	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+[        ] 	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+[        ] 	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:42)
+[        ] 	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:75)
+[        ] 	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+[        ] 	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
+[        ] 	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:28)
+[        ] 	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:67)
+[        ] 	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:37)
+[        ] 	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:61)
+[        ] 	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:26)
+[        ] 	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:69)
+[        ] 	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:46)
+[        ] 	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:40)
+[        ] 	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:29)
+[        ] 	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
+[        ] 	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:75)
+[        ] 	at org.gradle.internal.Either$Right.fold(Either.java:175)
+[        ] 	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:62)
+[        ] 	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:73)
+[        ] 	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:48)
+[        ] 	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:46)
+[        ] 	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:35)
+[        ] 	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:75)
+[        ] 	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:53)
+[        ] 	at java.base/java.util.Optional.orElseGet(Unknown Source)
+[        ] 	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:53)
+[        ] 	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:35)
+[        ] 	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+[        ] 	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+[        ] 	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:49)
+[        ] 	at org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(ResolveIncrementalCachingStateStep.java:27)
+[        ] 	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:71)
+[        ] 	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:39)
+[        ] 	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:65)
+[        ] 	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:36)
+[        ] 	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:107)
+[        ] 	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:56)
+[        ] 	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:64)
+[        ] 	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
+[        ] 	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.executeWithNonEmptySources(AbstractSkipEmptyWorkStep.java:125)
+[        ] 	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:56)
+[        ] 	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:36)
+[        ] 	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+[        ] 	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
+[        ] 	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
+[        ] 	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:75)
+[        ] 	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:41)
+[        ] 	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$execute$0(AssignMutableWorkspaceStep.java:35)
+[        ] 	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:289)
+[        ] 	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:31)
+[        ] 	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:22)
+[        ] 	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+[        ] 	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+[        ] 	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
+[        ] 	at java.base/java.util.Optional.orElseGet(Unknown Source)
+[        ] 	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
+[        ] 	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
+[        ] 	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
+[        ] 	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
+[        ] 	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:48)
+[        ] 	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:35)
+[        ] 	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:64)
+[        ] 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:127)
+[        ] 	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:116)
+[        ] 	at org.gradle.api.internal.tasks.execution.ProblemsTaskPathTrackingTaskExecuter.execute(ProblemsTaskPathTrackingTaskExecuter.java:41)
+[        ] 	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+[        ] 	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+[        ] 	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+[        ] 	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+[        ] 	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+[   +1 ms] 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+[        ] 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+[        ] 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:210)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:205)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:67)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:60)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:167)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:60)
+[        ] 	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:54)
+[        ] 	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+[        ] 	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+[        ] 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+[        ] 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+[        ] 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+[        ] 	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+[        ] 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+[        ] 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+[        ] 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
+[        ] 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+[        ] 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+[        ] 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
+[        ] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[        ] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[        ] 	at java.base/java.lang.Thread.run(Unknown Source)
+[        ] BUILD FAILED in 25s
+[        ] Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+[        ] You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+[        ] For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+[        ] 6 actionable tasks: 2 executed, 4 up-to-date
+[        ] Watched directory hierarchies: [C:\flutter\packages\flutter_tools\gradle]
+[ +115 ms] Running Gradle task 'assembleDebug'... (completed in 26.2s)
+[  +23 ms] "flutter apk" took 27,916ms.
+[ +164 ms] Gradle task assembleDebug failed with exit code 1
+[        ] 
+           #0      throwToolExit (package:flutter_tools/src/base/common.dart:34:3)
+           #1      AndroidGradleBuilder.buildGradleApp (package:flutter_tools/src/android/gradle.dart:592:7)
+           <asynchronous suspension>
+           #2      AndroidGradleBuilder.buildApk (package:flutter_tools/src/android/gradle.dart:234:5)
+           <asynchronous suspension>
+           #3      BuildApkCommand.runCommand (package:flutter_tools/src/commands/build_apk.dart:131:5)
+           <asynchronous suspension>
+           #4      FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1590:27)
+           <asynchronous suspension>
+           #5      AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+           <asynchronous suspension>
+           #6      CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+           <asynchronous suspension>
+           #7      FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:496:9)
+           <asynchronous suspension>
+           #8      AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+           <asynchronous suspension>
+           #9      FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:431:5)
+           <asynchronous suspension>
+           #10     FlutterCommandRunner.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:307:33)
+           <asynchronous suspension>
+           #11     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:104:11)
+           <asynchronous suspension>
+           #12     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+           <asynchronous suspension>
+           #13     main (package:flutter_tools/executable.dart:103:3)
+           <asynchronous suspension>
+
+
+[        ] Running 1 shutdown hook
+[   +2 ms] Shutdown hooks complete
+[ +120 ms] exiting with code 1

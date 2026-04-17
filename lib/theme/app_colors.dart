@@ -8,6 +8,7 @@ class AppColors {
   static const tealLight = Color(0xFFE8F8F9);
   static const tealMid = Color(0xFFC2EEF1);
   static const background = Color(0xFFF0F7F8);
+  static const pageBackground = background;
   static const cardBg = Color(0xFFFFFFFF);
   static const darkBg = Color(0xFF0D1F24);
   static const darkCard = Color(0xFF1A2F36);

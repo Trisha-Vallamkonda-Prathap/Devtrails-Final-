@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../providers/policy_provider.dart';
 import '../../providers/role_provider.dart';
@@ -11,6 +12,7 @@ import '../../providers/worker_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/auth_utils.dart';
+import '../main/main_shell.dart';
 import '../subscription_payment_screen.dart';
 import 'set_password_screen.dart';
 import 'terms_screen.dart';
@@ -83,7 +85,8 @@ class _OtpScreenState extends State<OtpScreen> {
       await context.read<RoleProvider>().setRole(widget.role);
       await AuthUtils.markLoggedIn();
 
-      final userId = AuthUtils.userIdFromPhone(phone: widget.phone, role: widget.role);
+      final userId =
+          AuthUtils.userIdFromPhone(phone: widget.phone, role: widget.role);
       final isFirstLogin = await AuthUtils.isFirstLogin(userId);
 
       if (!mounted) return;
@@ -92,7 +95,8 @@ class _OtpScreenState extends State<OtpScreen> {
         Navigator.pushAndRemoveUntil(
           context,
           CupertinoPageRoute<void>(
-            builder: (_) => SetPasswordScreen(role: widget.role, phone: widget.phone),
+            builder: (_) =>
+                SetPasswordScreen(role: widget.role, phone: widget.phone),
           ),
           (route) => false,
         );
@@ -119,7 +123,24 @@ class _OtpScreenState extends State<OtpScreen> {
 
         final policyProvider = context.read<PolicyProvider>();
         await policyProvider.loadPolicy(worker.id);
+        final prefs = await SharedPreferences.getInstance();
+        final hasPaidSession =
+            prefs.getBool('session_has_paid_subscription') ?? false;
 
+        if (!mounted) return;
+
+        if (policyProvider.activePolicy != null || hasPaidSession) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            CupertinoPageRoute<void>(
+              builder: (_) => const MainShell(initialTab: 0),
+            ),
+            (route) => false,
+          );
+          return;
+        }
+
+        await prefs.remove('session_has_paid_subscription');
         if (!mounted) return;
 
         Navigator.pushAndRemoveUntil(
@@ -182,7 +203,8 @@ class _OtpScreenState extends State<OtpScreen> {
                         children: [
                           IconButton(
                             onPressed: () => Navigator.pop(context),
-                            icon: const Icon(Icons.arrow_back, color: Colors.white),
+                            icon: const Icon(Icons.arrow_back,
+                                color: Colors.white),
                           ),
                           const Text(
                             'Verify your number',
@@ -193,13 +215,16 @@ class _OtpScreenState extends State<OtpScreen> {
                             ),
                           ),
                           Text(
-                            widget.isReturningUser ? 'Welcome back! Verify to continue.' : 'OTP sent to ${widget.phone}',
+                            widget.isReturningUser
+                                ? 'Welcome back! Verify to continue.'
+                                : 'OTP sent to ${widget.phone}',
                             style: TextStyle(
                               color: Colors.white.withValues(alpha: 0.75),
                               fontSize: 14,
                             ),
                           ),
-                          if (widget.debugOtp != null && widget.debugOtp!.isNotEmpty) ...[
+                          if (widget.debugOtp != null &&
+                              widget.debugOtp!.isNotEmpty) ...[
                             const SizedBox(height: 8),
                             Text(
                               'Fallback OTP: ${widget.debugOtp}',
@@ -254,7 +279,8 @@ class _OtpScreenState extends State<OtpScreen> {
                                   setState(() => _complete = true);
                                   _verify(value);
                                 },
-                                onChanged: (value) => setState(() => _complete = value.length == 6),
+                                onChanged: (value) => setState(
+                                    () => _complete = value.length == 6),
                               ),
                               const SizedBox(height: 12),
                               Center(
@@ -275,7 +301,9 @@ class _OtpScreenState extends State<OtpScreen> {
                               GradientButton(
                                 label: 'Verify OTP',
                                 isLoading: _verifying,
-                                onPressed: _complete ? () => _verify(_otpController.text) : null,
+                                onPressed: _complete
+                                    ? () => _verify(_otpController.text)
+                                    : null,
                               ),
                             ],
                           ),

@@ -22,20 +22,28 @@ class PlanScreen extends StatelessWidget {
           children: [
             Card(
               elevation: 2,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Weekly Premium: Rs ${policy?.weeklyPremium ?? 120}', style: AppTextStyles.body),
+                    Text('Weekly Premium: Rs ${policy?.weeklyPremium ?? 120}',
+                        style: AppTextStyles.body),
                     const SizedBox(height: 10),
-                    Text('Coverage: Rs ${policy?.coverageLimit ?? 10000}', style: AppTextStyles.body),
+                    Text('Coverage: Rs ${policy?.coverageLimit ?? 10000}',
+                        style: AppTextStyles.body),
                     const SizedBox(height: 10),
-                    Text('Status: ${policy?.status ?? 'Inactive'}', style: policy?.isActive == true ? AppTextStyles.success : AppTextStyles.error),
+                    Text('Status: ${policy?.status ?? 'Inactive'}',
+                        style: policy?.isActive == true
+                            ? AppTextStyles.success
+                            : AppTextStyles.error),
                     if (policy?.endDate != null) ...[
                       const SizedBox(height: 10),
-                      Text('Expires: ${policy!.endDate.toString().split(' ')[0]}', style: AppTextStyles.body),
+                      Text(
+                          'Expires: ${policy!.endDate.toString().split(' ')[0]}',
+                          style: AppTextStyles.body),
                     ],
                   ],
                 ),

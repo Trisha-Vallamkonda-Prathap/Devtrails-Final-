@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/location_provider.dart';
@@ -11,8 +12,13 @@ import 'providers/worker_provider.dart';
 import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
 
-void main() {
+final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<ScaffoldMessengerState> appScaffoldMessengerKey =
+  GlobalKey<ScaffoldMessengerState>();
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const GigShieldApp());
 }
@@ -32,6 +38,8 @@ class GigShieldApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LocationProvider()),
       ],
       child: MaterialApp(
+        navigatorKey: appNavigatorKey,
+        scaffoldMessengerKey: appScaffoldMessengerKey,
         debugShowCheckedModeBanner: false,
         title: 'GigShield',
         theme: AppTheme.light(),

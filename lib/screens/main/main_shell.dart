@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../providers/policy_provider.dart';
 import '../../theme/app_colors.dart';
-import '../subscription_payment_screen.dart';
 import 'alerts_screen.dart';
 import 'earnings_screen.dart';
 import 'home_screen.dart';

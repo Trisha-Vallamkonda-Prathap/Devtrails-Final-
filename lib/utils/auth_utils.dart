@@ -12,6 +12,8 @@ import '../screens/onboarding/login_screen.dart';
 class AuthUtils {
   static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
   static const String _sessionLoggedInKey = 'session_logged_in';
+  static const String _sessionHasPaidSubscriptionKey =
+      'session_has_paid_subscription';
 
   static String userIdFromPhone({required String phone, required AppRole role}) {
     return '${role.name}_$phone';
@@ -51,6 +53,7 @@ class AuthUtils {
   static Future<void> markLoggedOut() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_sessionLoggedInKey, false);
+    await prefs.remove(_sessionHasPaidSubscriptionKey);
   }
 
   static Future<void> logout({
