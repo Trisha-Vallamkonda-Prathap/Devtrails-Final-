@@ -7,22 +7,36 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:sensors_plus/sensors_plus.dart';
 
+/// GigShield Location Service
+/// Multi-layer anti-spoofing: 6 defence layers, never blocks user.
 class LocationService {
   static const String _nominatimBase =
       'https://nominatim.openstreetmap.org/reverse';
 
+  // ── Sensor buffers ──
   final List<double> _accelMagnitudes = [];
   StreamSubscription<AccelerometerEvent>? _accelSub;
   bool _listening = false;
 
+  // ── Trajectory (last 5 positions) ──
   final List<_PositionStamp> _trajectory = [];
-  int _riskScore = 0;
 
+  // ── Layer 4: fraud ring detection ──
+  final List<DateTime> _locationFetchTimes = [];
+  int _rapidSwitchCount = 0;
+
+  // ── Layer 6: adaptive trust score (0–100, higher = more trusted) ──
+  double _trustScore = 70.0;
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // PUBLIC: get current position with timeout + fallback
+  // ─────────────────────────────────────────────────────────────────────────
   Future<LocationResult> getCurrentLocation() async {
     final perm = await _ensurePermission();
     if (!perm.granted) return LocationResult.error(perm.message);
 
     _startAccelerometer();
+    _recordFetchTime();
 
     Position position;
     try {
@@ -43,13 +57,14 @@ class LocationService {
           );
         } catch (_) {
           return LocationResult.error(
-              'Could not get location. Check that GPS is turned on.');
+              'Could not get location. Please ensure GPS is enabled.');
         }
       }
     } catch (e) {
       return LocationResult.error('Location error: ${e.toString()}');
     }
 
+    // ── Record trajectory ──
     _trajectory.add(_PositionStamp(
       lat: position.latitude,
       lng: position.longitude,
@@ -57,11 +72,21 @@ class LocationService {
     ));
     if (_trajectory.length > 5) _trajectory.removeAt(0);
 
-    _riskScore = 0;
-    final spoofCheck = _computeRisk(position);
+    // ── Run multi-layer risk analysis ──
+    final riskResult = await _runMultiLayerAnalysis(position);
 
-    if (spoofCheck.level == _RiskLevel.high) {
-      return LocationResult.spoofDetected(spoofCheck.reason);
+    // HIGH risk (mock location) — this is the only soft-block
+    if (riskResult.level == _RiskLevel.high) {
+      _adjustTrust(-15);
+      return LocationResult.spoofDetected(riskResult.reason);
+    }
+
+    // MEDIUM/LOW: pass through with risk metadata — never block
+    if (riskResult.level == _RiskLevel.medium ||
+        riskResult.level == _RiskLevel.low) {
+      _adjustTrust(-5);
+    } else {
+      _adjustTrust(3);
     }
 
     final address =
@@ -72,63 +97,114 @@ class LocationService {
       lng: position.longitude,
       accuracy: position.accuracy,
       address: address,
-      riskScore: _riskScore,
+      riskScore: riskResult.score,
       riskReason:
-          spoofCheck.level != _RiskLevel.normal ? spoofCheck.reason : null,
+          riskResult.level != _RiskLevel.normal ? riskResult.reason : null,
+      trustScore: _trustScore,
     );
   }
 
-  _RiskCheck _computeRisk(Position position) {
-    _riskScore = 0;
+  // ─────────────────────────────────────────────────────────────────────────
+  // MULTI-LAYER RISK ANALYSIS
+  // ─────────────────────────────────────────────────────────────────────────
+  Future<_RiskResult> _runMultiLayerAnalysis(Position position) async {
+    int score = 0;
+    final reasons = <String>[];
 
+    // ── LAYER 1: Core signal — isMocked (highest confidence) ──────────────
     if (position.isMocked) {
-      return _RiskCheck(
+      return _RiskResult(
         level: _RiskLevel.high,
+        score: 100,
         reason: 'Mock location detected. Please disable any GPS spoofing apps.',
       );
     }
 
+    // Implausibly perfect accuracy — another high-confidence spoof signal
     if (position.accuracy > 0 && position.accuracy < 1.0) {
-      return _RiskCheck(
+      return _RiskResult(
         level: _RiskLevel.high,
-        reason: 'GPS accuracy is implausibly perfect. Disable mock location.',
+        score: 100,
+        reason:
+            'GPS accuracy is implausibly perfect. Please disable mock location.',
       );
     }
 
-    if (_trajectory.length >= 2) {
-      if (!checkTrajectoryPlausible(_trajectory)) {
-        _riskScore += 40;
+    // ── LAYER 1b: Sensor fusion — accelerometer vs GPS ─────────────────────
+    final accelVar = _accelVariance();
+    final isStationary = accelVar < 0.02;
+    if (isStationary && position.accuracy < 10) {
+      score += 22;
+      reasons.add('device appears static but GPS shows high accuracy');
+    }
+
+    // ── LAYER 1c: Network context ──────────────────────────────────────────
+    final connectivity = await Connectivity().checkConnectivity();
+    final isOnWifi = connectivity == ConnectivityResult.wifi;
+    if (isOnWifi && isStationary && position.accuracy < 15) {
+      score += 10;
+      reasons.add('stable WiFi with no movement and high GPS accuracy');
+    }
+
+    // ── LAYER 2: Platform activity coherence ───────────────────────────────
+    if (_trajectory.length >= 3) {
+      final allSame = _trajectory.every((p) =>
+          (p.lat - _trajectory.first.lat).abs() < 0.0001 &&
+          (p.lng - _trajectory.first.lng).abs() < 0.0001);
+      if (allSame) {
+        score += 15;
+        reasons.add('location has been perfectly static across multiple reads');
       }
     }
 
-    final accelVariance = _accelVariance();
-    if (accelVariance < 0.01 && position.accuracy < 10) {
-      _riskScore += 20;
+    // ── LAYER 3: Geospatial trajectory — teleport / unrealistic speed ──────
+    if (_trajectory.length >= 2) {
+      if (!_checkTrajectoryPlausible(_trajectory)) {
+        score += 40;
+        reasons.add('sudden location jump detected');
+      }
     }
 
-    final age =
-        DateTime.now().difference(position.timestamp).inSeconds.abs();
-    if (age > 30) {
-      _riskScore += 5;
+    // ── LAYER 4: Fraud ring detection — rapid repeated fetches ────────────
+    if (_rapidSwitchCount >= 5) {
+      score += 20;
+      reasons.add('unusually frequent location requests detected');
     }
 
+    // ── LAYER 5: Mobility context — poor accuracy is NOT spoof ────────────
     if (position.accuracy > 100) {
-      _riskScore += 5;
+      score += 5;
     }
 
-    if (_riskScore >= 40) {
-      return _RiskCheck(
+    // Stale timestamp > 30s — just refresh signal, not spoof
+    final age = DateTime.now().difference(position.timestamp).inSeconds.abs();
+    if (age > 30) {
+      score += 3;
+    }
+
+    // ── LAYER 6: Adaptive trust score modifier ─────────────────────────────
+    if (_trustScore < 40) {
+      score += 10;
+    }
+
+    // ── Classify final risk level ──────────────────────────────────────────
+    if (score >= 50) {
+      return _RiskResult(
         level: _RiskLevel.medium,
-        reason: 'We\'ve detected a possible location inconsistency.',
+        score: score,
+        reason:
+            'We\'ve detected a possible location inconsistency. Your access is not affected.',
       );
     }
-    if (_riskScore > 5) {
-      return _RiskCheck(
+    if (score >= 15) {
+      return _RiskResult(
         level: _RiskLevel.low,
-        reason: 'Location signal is weak. Data may be approximate.',
+        score: score,
+        reason:
+            'Location signal is weak or imprecise. Data may be approximate.',
       );
     }
-    return _RiskCheck(level: _RiskLevel.normal, reason: '');
+    return _RiskResult(level: _RiskLevel.normal, score: score, reason: '');
   }
 
   double _accelVariance() {
@@ -142,7 +218,20 @@ class LocationService {
     return variance;
   }
 
-  bool checkTrajectoryPlausible(List<_PositionStamp> trajectory) {
+  void _recordFetchTime() {
+    final now = DateTime.now();
+    _locationFetchTimes.add(now);
+    _locationFetchTimes.removeWhere((t) => now.difference(t).inSeconds > 60);
+    _rapidSwitchCount = _locationFetchTimes.length;
+  }
+
+  void _adjustTrust(double delta) {
+    _trustScore = (_trustScore + delta).clamp(0.0, 100.0);
+  }
+
+  double get currentTrustScore => _trustScore;
+
+  bool _checkTrajectoryPlausible(List<_PositionStamp> trajectory) {
     if (trajectory.length < 2) return true;
     for (int i = 1; i < trajectory.length; i++) {
       final a = trajectory[i - 1];
@@ -157,6 +246,8 @@ class LocationService {
     return true;
   }
 
+  // ── Reverse geocode (Nominatim) ───────────────────────────────────────────
+  // Priority: neighbourhood > suburb > locality > city
   Future<LocationAddress?> _reverseGeocode(double lat, double lng) async {
     try {
       final uri = Uri.parse(
@@ -169,17 +260,26 @@ class LocationService {
       final json = jsonDecode(res.body) as Map<String, dynamic>;
       final addr = json['address'] as Map<String, dynamic>?;
       if (addr == null) return null;
-      final neighbourhood = (addr['suburb'] ??
-          addr['neighbourhood'] ??
-          addr['quarter'] ??
-          addr['residential']) as String?;
+
+      // BUG FIX 1: strict priority — neighbourhood > suburb > locality > city
+      // NEVER fallback to "Custom Zone" here; that is the caller's job
+      final neighbourhood = addr['neighbourhood'] as String?;
+      final suburb = addr['suburb'] as String?;
+      final locality = addr['locality'] as String? ??
+          addr['quarter'] as String? ??
+          addr['residential'] as String?;
       final city = (addr['city'] ??
           addr['town'] ??
           addr['municipality'] ??
           addr['county']) as String?;
       final state = addr['state'] as String?;
+
+      // Best zone name: neighbourhood > suburb > locality > city
+      // null means ALL fields are null — caller decides fallback label
+      final bestZoneName = neighbourhood ?? suburb ?? locality ?? city;
+
       return LocationAddress(
-        neighbourhood: neighbourhood,
+        neighbourhood: bestZoneName,
         city: city,
         state: state,
         formattedAddress: json['display_name'] as String?,
@@ -189,6 +289,7 @@ class LocationService {
     }
   }
 
+  // ── Zone resolution ──────────────────────────────────────────────────────
   String? resolveZoneFromCoords(double lat, double lng) {
     String? nearest;
     double minDist = double.infinity;
@@ -207,6 +308,26 @@ class LocationService {
     if (zone == null) return null;
     return kZoneCity[zone];
   }
+
+  /// Precise geofence check: is (userLat,userLng) within [radiusMeters] of zone centre?
+  bool isInsideZone(
+    double userLat,
+    double userLng,
+    double zoneLat,
+    double zoneLng,
+    double radiusMeters,
+  ) {
+    return _haversineMeters(userLat, userLng, zoneLat, zoneLng) <=
+        radiusMeters;
+  }
+
+  double distanceToZoneCenter(
+    double userLat,
+    double userLng,
+    double zoneLat,
+    double zoneLng,
+  ) =>
+      _haversineMeters(userLat, userLng, zoneLat, zoneLng);
 
   Future<_PermResult> _ensurePermission() async {
     final serviceOn = await Geolocator.isLocationServiceEnabled();
@@ -227,7 +348,7 @@ class LocationService {
       return _PermResult(
           granted: false,
           message:
-              'Location permission is permanently denied. Enable it in App Settings.');
+              'Location permission is permanently denied. Please enable it in App Settings.');
     }
     return _PermResult(granted: true, message: '');
   }
@@ -240,12 +361,11 @@ class LocationService {
     ).listen((e) {
       final mag = math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
       _accelMagnitudes.add(mag);
-      if (_accelMagnitudes.length > 30) _accelMagnitudes.removeAt(0);
+      if (_accelMagnitudes.length > 40) _accelMagnitudes.removeAt(0);
     });
   }
 
-  double _haversineMeters(
-      double lat1, double lon1, double lat2, double lon2) {
+  double _haversineMeters(double lat1, double lon1, double lat2, double lon2) {
     const R = 6371000.0;
     final dLat = _rad(lat2 - lat1);
     final dLon = _rad(lon2 - lon1);
@@ -265,7 +385,9 @@ class LocationService {
   }
 }
 
+// ── Zone coordinate lookup ────────────────────────────────────────────────────
 const Map<String, List<double>> kZoneCoords = {
+  // Bengaluru (8 zones)
   'Hebbal': [13.0450, 77.5965],
   'Koramangala': [12.9352, 77.6245],
   'Indiranagar': [12.9784, 77.6408],
@@ -274,6 +396,7 @@ const Map<String, List<double>> kZoneCoords = {
   'Electronic City': [12.8399, 77.6770],
   'Marathahalli': [12.9591, 77.6971],
   'Bannerghatta Road': [12.8987, 77.5972],
+  // Mumbai (8 zones)
   'Kurla': [19.0728, 72.8826],
   'Dharavi': [19.0437, 72.8540],
   'Andheri': [19.1136, 72.8697],
@@ -282,39 +405,34 @@ const Map<String, List<double>> kZoneCoords = {
   'Vikhroli': [19.1024, 72.9240],
   'Bandra': [19.0596, 72.8295],
   'Thane': [19.2183, 72.9781],
+  // Hyderabad (6 zones)
   'Secunderabad': [17.4399, 78.4983],
   'Banjara Hills': [17.4156, 78.4347],
   'HITEC City': [17.4435, 78.3772],
   'Kukatpally': [17.4849, 78.3995],
   'Gachibowli': [17.4401, 78.3489],
   'Madhapur': [17.4468, 78.3890],
+  // Chennai (6 zones)
   'Tambaram': [12.9249, 80.1000],
   'Anna Nagar': [13.0850, 80.2101],
   'Guindy': [13.0067, 80.2206],
   'Velachery': [12.9815, 80.2210],
   'Porur': [13.0348, 80.1568],
   'T Nagar': [13.0418, 80.2341],
+  // Delhi (6 zones)
   'Connaught Place': [28.6315, 77.2167],
   'Saket': [28.5244, 77.2090],
   'Dwarka': [28.5921, 77.0460],
   'Rohini': [28.7041, 77.1025],
   'Laxmi Nagar': [28.6318, 77.2781],
   'Janakpuri': [28.6219, 77.0878],
+  // Pune (6 zones)
   'Koregaon Park': [18.5362, 73.8938],
   'Wakad': [18.5990, 73.7612],
   'Hadapsar': [18.5089, 73.9260],
   'Kothrud': [18.5074, 73.8077],
   'Viman Nagar': [18.5679, 73.9143],
   'Hinjewadi': [18.5912, 73.7389],
-  // Kolkata zones
-  'Salt Lake': [22.5821, 88.4017],
-  'Park Street': [22.5520, 88.3512],
-  'Howrah': [22.5958, 88.2636],
-  'Garia': [22.4637, 88.3869],
-  'Dum Dum': [22.6519, 88.3985],
-  'New Town': [22.5902, 88.4799],
-  'Ballygunge': [22.5261, 88.3669],
-  'Jadavpur': [22.4975, 88.3714],
 };
 
 const Map<String, String> kZoneCity = {
@@ -358,16 +476,9 @@ const Map<String, String> kZoneCity = {
   'Kothrud': 'Pune',
   'Viman Nagar': 'Pune',
   'Hinjewadi': 'Pune',
-  'Salt Lake': 'Kolkata',
-  'Park Street': 'Kolkata',
-  'Howrah': 'Kolkata',
-  'Garia': 'Kolkata',
-  'Dum Dum': 'Kolkata',
-  'New Town': 'Kolkata',
-  'Ballygunge': 'Kolkata',
-  'Jadavpur': 'Kolkata',
 };
 
+// ── Data classes ──────────────────────────────────────────────────────────────
 class LocationResult {
   const LocationResult._({
     required this.status,
@@ -378,9 +489,10 @@ class LocationResult {
     this.errorMessage,
     this.riskScore = 0,
     this.riskReason,
+    this.trustScore = 70.0,
   });
 
-  final _LocationStatus status;
+  final LocationStatus status;
   final double? lat;
   final double? lng;
   final double? accuracy;
@@ -388,13 +500,14 @@ class LocationResult {
   final String? errorMessage;
   final int riskScore;
   final String? riskReason;
+  final double trustScore;
 
-  bool get isSuccess => status == _LocationStatus.success;
-  bool get isSpoofDetected => status == _LocationStatus.spoofDetected;
-  bool get isError => status == _LocationStatus.error;
+  bool get isSuccess => status == LocationStatus.success;
+  bool get isSpoofDetected => status == LocationStatus.spoofDetected;
+  bool get isError => status == LocationStatus.error;
   bool get isPoorAccuracy => (accuracy ?? 0) > 100;
-  bool get hasMediumRisk => riskScore >= 31 && riskScore < 61;
-  bool get hasLowRisk => riskScore > 5 && riskScore < 31;
+  bool get hasMediumRisk => riskScore >= 50;
+  bool get hasLowRisk => riskScore >= 15 && riskScore < 50;
 
   factory LocationResult.success({
     required double lat,
@@ -403,29 +516,39 @@ class LocationResult {
     required LocationAddress? address,
     int riskScore = 0,
     String? riskReason,
+    double trustScore = 70.0,
   }) =>
       LocationResult._(
-        status: _LocationStatus.success,
+        status: LocationStatus.success,
         lat: lat,
         lng: lng,
         accuracy: accuracy,
         address: address,
         riskScore: riskScore,
         riskReason: riskReason,
+        trustScore: trustScore,
       );
 
   factory LocationResult.spoofDetected(String reason) => LocationResult._(
-        status: _LocationStatus.spoofDetected,
+        status: LocationStatus.spoofDetected,
         errorMessage: reason,
       );
 
   factory LocationResult.error(String msg) =>
-      LocationResult._(status: _LocationStatus.error, errorMessage: msg);
+      LocationResult._(status: LocationStatus.error, errorMessage: msg);
 }
 
-enum _LocationStatus { success, spoofDetected, error }
+enum LocationStatus { success, spoofDetected, error }
 
 enum _RiskLevel { normal, low, medium, high }
+
+class _RiskResult {
+  const _RiskResult(
+      {required this.level, required this.score, required this.reason});
+  final _RiskLevel level;
+  final int score;
+  final String reason;
+}
 
 class LocationAddress {
   const LocationAddress(
@@ -444,12 +567,6 @@ class _PositionStamp {
   final double lat;
   final double lng;
   final DateTime time;
-}
-
-class _RiskCheck {
-  const _RiskCheck({required this.level, required this.reason});
-  final _RiskLevel level;
-  final String reason;
 }
 
 class _PermResult {

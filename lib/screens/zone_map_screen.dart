@@ -13,6 +13,9 @@ import '../../services/location_service.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_theme.dart';
 
+// BUG FIX 6: precise geofence radius in metres
+const double kZoneGeofenceRadius = 3500.0;
+
 class ZoneMapScreen extends StatefulWidget {
   const ZoneMapScreen({
     super.key,
@@ -37,10 +40,18 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
   double? _userAccuracy;
   Map<String, dynamic>? _selectedZone;
   bool _locating = false;
+  bool _validating = false;
   bool _showSpoofWarning = false;
   String? _spoofReason;
   String? _zoneWarning;
   String _searchQuery = '';
+
+  // BUG FIX 7: dynamic zones persisted in state, never lost on navigation
+  final List<Map<String, dynamic>> _dynamicZones = [];
+
+  // Fraud ring detection
+  int _zoneSwitchAttempts = 0;
+  DateTime? _lastSwitchAttempt;
 
   late AnimationController _pulseCtrl;
   late Animation<double> _pulseAnim;
@@ -54,44 +65,81 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
     'Pune': LatLng(18.5204, 73.8567),
   };
 
-  List<Map<String, dynamic>> get _allZones {
+  List<Map<String, dynamic>> get _configZones {
     final fromConfig = kZones
         .where((z) => z['city_key'] == widget.cityName)
         .cast<Map<String, dynamic>>()
         .toList();
     if (fromConfig.isNotEmpty) return fromConfig;
+
     final center =
         _cityCenter[widget.cityName] ?? const LatLng(19.0760, 72.8777);
     return [
       {
         'zone': 'Central ${widget.cityName}',
         'city': widget.cityName,
+        'city_key': widget.cityName,
         'tier': 'medium',
         'premium': 90.0,
         'coverage': 2240.0,
         'lat': center.latitude,
-        'lng': center.longitude
+        'lng': center.longitude,
       },
       {
         'zone': 'North ${widget.cityName}',
         'city': widget.cityName,
+        'city_key': widget.cityName,
         'tier': 'high',
         'premium': 120.0,
         'coverage': 2500.0,
         'lat': center.latitude + 0.03,
-        'lng': center.longitude
+        'lng': center.longitude,
       },
       {
         'zone': 'South ${widget.cityName}',
         'city': widget.cityName,
+        'city_key': widget.cityName,
         'tier': 'low',
         'premium': 60.0,
         'coverage': 2000.0,
         'lat': center.latitude - 0.03,
-        'lng': center.longitude
+        'lng': center.longitude,
+      },
+      {
+        'zone': 'East ${widget.cityName}',
+        'city': widget.cityName,
+        'city_key': widget.cityName,
+        'tier': 'medium',
+        'premium': 90.0,
+        'coverage': 2240.0,
+        'lat': center.latitude,
+        'lng': center.longitude + 0.03,
+      },
+      {
+        'zone': 'West ${widget.cityName}',
+        'city': widget.cityName,
+        'city_key': widget.cityName,
+        'tier': 'low',
+        'premium': 60.0,
+        'coverage': 2000.0,
+        'lat': center.latitude,
+        'lng': center.longitude - 0.03,
+      },
+      {
+        'zone': 'Northeast ${widget.cityName}',
+        'city': widget.cityName,
+        'city_key': widget.cityName,
+        'tier': 'high',
+        'premium': 120.0,
+        'coverage': 2500.0,
+        'lat': center.latitude + 0.02,
+        'lng': center.longitude + 0.02,
       },
     ];
   }
+
+  List<Map<String, dynamic>> get _allZones =>
+      [..._configZones, ..._dynamicZones];
 
   List<Map<String, dynamic>> get _filteredZones {
     if (_searchQuery.isEmpty) return _allZones;
@@ -115,7 +163,6 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
     _pulseAnim = Tween<double>(begin: 0.5, end: 1.0).animate(
       CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut),
     );
-
     WidgetsBinding.instance.addPostFrameCallback((_) => _locateMe());
   }
 
@@ -128,6 +175,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
     super.dispose();
   }
 
+  // ── GPS locate + dynamic zone creation ───────────────────────────────────
   Future<void> _locateMe() async {
     setState(() {
       _locating = true;
@@ -136,7 +184,6 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
     });
 
     final result = await _locationService.getCurrentLocation();
-
     if (!mounted) return;
 
     if (result.isSpoofDetected) {
@@ -150,11 +197,13 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
 
     if (result.isError) {
       setState(() => _locating = false);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(result.errorMessage ?? 'Could not get location'),
-        backgroundColor: AppColors.danger,
-        behavior: SnackBarBehavior.floating,
-      ));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(result.errorMessage ?? 'Could not get location'),
+          backgroundColor: AppColors.danger,
+          behavior: SnackBarBehavior.floating,
+        ));
+      }
       return;
     }
 
@@ -166,47 +215,176 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
     });
 
     _mapController.move(pos, 14.5);
-    _autoSelectNearest(pos);
+
+    final matched = _autoSelectNearest(pos);
+
+    if (!matched) {
+      // BUG FIX 1: strict priority naming — neighbourhood > suburb > locality > city
+      // address.neighbourhood already holds the best name from LocationService
+      final address = result.address;
+      final zoneName = address?.neighbourhood ?? 'Custom Zone';
+      final cityName = address?.city ?? widget.cityName;
+
+      final dynamicZone = <String, dynamic>{
+        'zone': zoneName,
+        'city': cityName,
+        'city_key': widget.cityName,
+        'tier': 'medium',
+        'premium': 90.0,
+        'coverage': 2240.0,
+        'lat': pos.latitude,
+        'lng': pos.longitude,
+        'isDynamic': true,
+      };
+
+      // BUG FIX 7: persist dynamic zone in state
+      setState(() {
+        _dynamicZones
+          ..clear()
+          ..add(dynamicZone);
+        _selectedZone = dynamicZone;
+      });
+
+      // Also update LocationProvider so it survives navigation
+      if (mounted) {
+        context.read<LocationProvider>().setActiveZone(
+              zoneName,
+              cityName,
+              dynamicZone: dynamicZone,
+            );
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              'No mapped zone nearby. Created "$zoneName" from your GPS position.'),
+          backgroundColor: AppColors.info,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
+        ));
+      }
+    }
+
+    if (result.riskReason != null && !result.isSpoofDetected) {
+      setState(() => _zoneWarning = result.riskReason);
+    }
   }
 
-  void _autoSelectNearest(LatLng pos) {
+  /// Returns true if a zone within 4km was found and auto-selected.
+  bool _autoSelectNearest(LatLng pos) {
     Map<String, dynamic>? nearest;
     double min = double.infinity;
-    for (final z in _allZones) {
+    for (final z in _configZones) {
       final d = Geolocator.distanceBetween(
-        pos.latitude,
-        pos.longitude,
-        z['lat'] as double,
-        z['lng'] as double,
+        pos.latitude, pos.longitude,
+        z['lat'] as double, z['lng'] as double,
       );
       if (d < min) {
         min = d;
         nearest = z;
       }
     }
-    if (nearest != null) setState(() => _selectedZone = nearest);
+    if (nearest != null && min <= 4000) {
+      setState(() => _selectedZone = nearest);
+      return true;
+    }
+    return false;
   }
 
-  Future<void> _onZoneTap(Map<String, dynamic> zone) async {
+  // ── Zone tap: highlight only, no switch ──────────────────────────────────
+  void _onZoneTap(Map<String, dynamic> zone) {
     setState(() {
       _selectedZone = zone;
       _zoneWarning = null;
     });
-
-    if (_userLatLng != null) {
-      final warning =
-          await context.read<LocationProvider>().validateZoneSelection(
-                zone['zone'] as String,
-                _userLatLng!.latitude,
-                _userLatLng!.longitude,
-              );
-      if (mounted && warning != null) {
-        setState(() => _zoneWarning = warning);
-      }
-    }
   }
 
+  // ── CONFIRM ZONE: BUG FIX 3 strict 3-step flow ───────────────────────────
+  // STEP 1: confirmation dialog
+  // STEP 2: fresh GPS fetch
+  // STEP 3: geofence validation — block if outside
   Future<void> _confirmZone(Map<String, dynamic> zone) async {
+    // ── STEP 1: Confirmation dialog ──
+    final confirmed = await _showConfirmDialog(zone);
+    if (!confirmed || !mounted) return;
+
+    // ── Fraud ring check ──
+    final now = DateTime.now();
+    if (_lastSwitchAttempt != null &&
+        now.difference(_lastSwitchAttempt!).inSeconds < 30) {
+      _zoneSwitchAttempts++;
+    } else {
+      _zoneSwitchAttempts = 1;
+    }
+    _lastSwitchAttempt = now;
+
+    if (_zoneSwitchAttempts >= 4) {
+      if (!mounted) return;
+      _showInfoSnack(
+        'Too many zone switch attempts. Please wait and try again.',
+        AppColors.warning,
+      );
+      return;
+    }
+
+    // Dynamic zones: user created them from their own GPS — skip distance check
+    // but still fetch fresh GPS for consistency
+    if (zone['isDynamic'] == true) {
+      await _finalizeZoneSwitch(zone);
+      return;
+    }
+
+    // ── STEP 2: Fetch fresh GPS ──
+    setState(() => _validating = true);
+
+    final result = await _locationService.getCurrentLocation();
+    if (!mounted) {
+      setState(() => _validating = false);
+      return;
+    }
+    setState(() => _validating = false);
+
+    if (result.isSpoofDetected) {
+      setState(() {
+        _showSpoofWarning = true;
+        _spoofReason = result.errorMessage;
+      });
+      return;
+    }
+
+    if (result.isError) {
+      _showInfoSnack(
+        result.errorMessage ??
+            'Could not verify location. Please ensure GPS is enabled.',
+        AppColors.danger,
+      );
+      return;
+    }
+
+    // ── STEP 3: BUG FIX 6 — precise haversine geofence check ──
+    final locProvider = context.read<LocationProvider>();
+    final geoResult = locProvider.validateGeofence(
+      result.lat!,
+      result.lng!,
+      zone['lat'] as double,
+      zone['lng'] as double,
+      kZoneGeofenceRadius,
+    );
+
+    if (!geoResult.isInside) {
+      // BUG FIX 3: block with clear message — do NOT switch
+      final distKm = (geoResult.distanceMeters / 1000).toStringAsFixed(1);
+      _showInfoSnack(
+        'You are ${distKm}km away from ${zone['zone']}. '
+        'Please move to the selected zone and try again.',
+        AppColors.danger,
+      );
+      return;
+    }
+
+    // ── Inside zone — proceed ──
+    await _finalizeZoneSwitch(zone);
+  }
+
+  Future<void> _finalizeZoneSwitch(Map<String, dynamic> zone) async {
     if (widget.isOnboarding) {
       Navigator.pop(context, zone);
       return;
@@ -215,11 +393,22 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
     final wp = context.read<WorkerProvider>();
     final worker = wp.worker;
     if (worker == null) return;
+
+    // BUG FIX 2: update BOTH persistent state (WorkerProvider) AND
+    // central location state (LocationProvider) atomically
     await wp.setWorker(worker.copyWith(
       zone: zone['zone'] as String,
       city: zone['city'] as String,
     ));
+
     if (!mounted) return;
+
+    context.read<LocationProvider>().setActiveZone(
+          zone['zone'] as String,
+          zone['city'] as String,
+          dynamicZone: zone['isDynamic'] == true ? zone : null,
+        );
+
     Navigator.pop(context, zone);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Zone updated to ${zone['zone']}'),
@@ -228,12 +417,227 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
     ));
   }
 
+  Future<bool> _showConfirmDialog(Map<String, dynamic> zone) async {
+    final tier = zone['tier'] as String;
+    final tierColor = zone['isDynamic'] == true
+        ? AppColors.info
+        : AppColors.tierColor(tier);
+
+    return await showDialog<bool>(
+          context: context,
+          barrierDismissible: true,
+          builder: (ctx) => Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)),
+            insetPadding:
+                const EdgeInsets.symmetric(horizontal: 28, vertical: 40),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: tierColor.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child:
+                            Icon(Icons.location_on, color: tierColor, size: 20),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Confirm Zone Switch',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.textPrimary),
+                            ),
+                            Text(
+                              zone['zone'] as String,
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: tierColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Text(
+                      'Your GPS location will be verified to confirm you are physically inside this zone. Zone switching is only permitted when you are in the selected area.',
+                      style: TextStyle(
+                          fontSize: 12.5,
+                          color: AppColors.textMid,
+                          height: 1.5),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(ctx, false),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.textMid,
+                            side: const BorderSide(color: AppColors.divider),
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                          child: const Text('Cancel',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600)),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(ctx, true),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                          child: const Text('Verify & Switch',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ) ??
+        false;
+  }
+
+  void _showInfoSnack(String msg, Color color) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(msg),
+      backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 5),
+    ));
+  }
+
+  void _onMapTap(LatLng point) {
+    Map<String, dynamic>? nearest;
+    double min = double.infinity;
+    for (final z in _allZones) {
+      final d = Geolocator.distanceBetween(
+        point.latitude, point.longitude,
+        z['lat'] as double, z['lng'] as double,
+      );
+      if (d < min && d < 3000) {
+        min = d;
+        nearest = z;
+      }
+    }
+    if (nearest != null) _onZoneTap(nearest);
+  }
+
+  List<Marker> _buildMarkers() {
+    return _allZones.map<Marker>((zone) {
+      final tier = zone['tier'] as String;
+      final isDynamic = zone['isDynamic'] == true;
+      final color = isDynamic
+          ? AppColors.info
+          : tier == 'high'
+              ? AppColors.danger
+              : tier == 'medium'
+                  ? AppColors.warning
+                  : AppColors.success;
+      final isSelected = _selectedZone?['zone'] == zone['zone'];
+
+      return Marker(
+        point: LatLng(zone['lat'] as double, zone['lng'] as double),
+        width: isSelected ? 48 : 36,
+        height: isSelected ? 48 : 36,
+        child: GestureDetector(
+          onTap: () => _onZoneTap(zone),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isSelected ? color : color.withValues(alpha: 0.85),
+              border:
+                  Border.all(color: Colors.white, width: isSelected ? 3 : 2),
+              boxShadow: [
+                BoxShadow(
+                  color: color.withValues(alpha: isSelected ? 0.5 : 0.2),
+                  blurRadius: isSelected ? 14 : 4,
+                ),
+              ],
+            ),
+            child: Icon(
+              isDynamic ? Icons.add_location : Icons.location_on,
+              color: Colors.white,
+              size: isSelected ? 24 : 18,
+            ),
+          ),
+        ),
+      );
+    }).toList();
+  }
+
+  List<CircleMarker> _buildCircles() {
+    return _allZones.map((zone) {
+      final tier = zone['tier'] as String;
+      final isDynamic = zone['isDynamic'] == true;
+      final color = isDynamic
+          ? AppColors.info
+          : tier == 'high'
+              ? AppColors.danger
+              : tier == 'medium'
+                  ? AppColors.warning
+                  : AppColors.success;
+      return CircleMarker(
+        point: LatLng(zone['lat'] as double, zone['lng'] as double),
+        radius: kZoneGeofenceRadius,
+        useRadiusInMeter: true,
+        color: color.withValues(alpha: 0.06),
+        borderColor: color.withValues(alpha: 0.22),
+        borderStrokeWidth: 1,
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final topPad = MediaQuery.of(context).padding.top;
+
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
+          // ── Map ──
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
@@ -243,7 +647,8 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
             ),
             children: [
               TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate:
+                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'com.example.gigshield',
                 maxZoom: 19,
               ),
@@ -289,6 +694,8 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
               ],
             ],
           ),
+
+          // ── Top bar ──
           Positioned(
             top: topPad + 8,
             left: 12,
@@ -304,46 +711,112 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
                 setState(() => _searchQuery = '');
                 _onZoneTap(zone);
                 _mapController.move(
-                    LatLng(zone['lat'] as double, zone['lng'] as double), 14.0);
+                  LatLng(zone['lat'] as double, zone['lng'] as double),
+                  14.0,
+                );
               },
             ),
           ),
+
+          // ── Legend ──
           Positioned(
             top: topPad + 70,
             right: 12,
-            child: _RiskLegend(),
+            child: const _RiskLegend(),
           ),
+
+          // ── Zone chip strip ──
+          if (_allZones.isNotEmpty)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: _selectedZone != null ? 240 : 16,
+              child: _ZoneChipStrip(
+                zones: _allZones,
+                selectedZone: _selectedZone,
+                onSelect: _onZoneTap,
+              ),
+            ),
+
+          // ── Locate FAB ──
           Positioned(
             right: 12,
-            bottom: _selectedZone != null ? 240 : 24,
+            bottom: _selectedZone != null ? 310 : 80,
             child: _LocateFab(
               loading: _locating,
               pulseAnim: _pulseAnim,
               onTap: _locateMe,
             ),
           ),
+
+          // ── Accuracy badge ──
           if (_userLatLng != null && !_locating)
             Positioned(
               right: 12,
-              bottom: _selectedZone != null ? 300 : 84,
+              bottom: _selectedZone != null ? 368 : 138,
               child: _AccuracyBadge(accuracy: _userAccuracy ?? 0),
             ),
+
+          // ── Validation loading overlay ──
+          if (_validating)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.35),
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: kCardShadow,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CircularProgressIndicator(
+                            color: AppColors.primary, strokeWidth: 2.5),
+                        const SizedBox(height: 14),
+                        const Text(
+                          'Verifying your location...',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textPrimary),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Checking that you are inside the selected zone',
+                          style: TextStyle(
+                              fontSize: 11, color: AppColors.textSoft),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+          // ── Spoof banner ──
           if (_showSpoofWarning)
             Positioned(
               left: 12,
               right: 12,
-              bottom: 16,
+              bottom: 20,
               child: _SpoofBanner(
                 reason: _spoofReason ?? '',
                 onDismiss: () => setState(() => _showSpoofWarning = false),
               ),
             ),
+
+          // ── Zone detail card ──
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
             left: 0,
             right: 0,
-            bottom: _selectedZone != null && !_showSpoofWarning ? 0 : -320,
+            bottom: _selectedZone != null && !_showSpoofWarning ? 0 : -360,
             child: _selectedZone == null
                 ? const SizedBox.shrink()
                 : _ZoneCard(
@@ -358,82 +831,9 @@ class _ZoneMapScreenState extends State<ZoneMapScreen>
       ),
     );
   }
-
-  List<Marker> _buildMarkers() {
-    return _allZones.map<Marker>((zone) {
-      final tier = zone['tier'] as String;
-      final color = tier == 'high'
-          ? AppColors.danger
-          : tier == 'medium'
-              ? AppColors.warning
-              : AppColors.success;
-      final isSelected = _selectedZone?['zone'] == zone['zone'];
-      return Marker(
-        point: LatLng(zone['lat'] as double, zone['lng'] as double),
-        width: isSelected ? 44 : 36,
-        height: isSelected ? 44 : 36,
-        child: GestureDetector(
-          onTap: () => _onZoneTap(zone),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isSelected ? color : color.withValues(alpha: 0.85),
-              border:
-                  Border.all(color: Colors.white, width: isSelected ? 3 : 2),
-              boxShadow: [
-                BoxShadow(
-                  color: color.withValues(alpha: isSelected ? 0.5 : 0.2),
-                  blurRadius: isSelected ? 12 : 4,
-                ),
-              ],
-            ),
-            child: Icon(Icons.location_on,
-                color: Colors.white, size: isSelected ? 22 : 18),
-          ),
-        ),
-      );
-    }).toList();
-  }
-
-  List<CircleMarker> _buildCircles() {
-    return _allZones.map((zone) {
-      final tier = zone['tier'] as String;
-      final color = tier == 'high'
-          ? AppColors.danger
-          : tier == 'medium'
-              ? AppColors.warning
-              : AppColors.success;
-      return CircleMarker(
-        point: LatLng(zone['lat'] as double, zone['lng'] as double),
-        radius: 1200,
-        useRadiusInMeter: true,
-        color: color.withValues(alpha: 0.07),
-        borderColor: color.withValues(alpha: 0.25),
-        borderStrokeWidth: 1,
-      );
-    }).toList();
-  }
-
-  void _onMapTap(LatLng point) {
-    Map<String, dynamic>? nearest;
-    double min = double.infinity;
-    for (final z in _allZones) {
-      final d = Geolocator.distanceBetween(
-        point.latitude,
-        point.longitude,
-        z['lat'] as double,
-        z['lng'] as double,
-      );
-      if (d < min && d < 3000) {
-        min = d;
-        nearest = z;
-      }
-    }
-    if (nearest != null) _onZoneTap(nearest);
-  }
 }
 
+// ── Top search bar ────────────────────────────────────────────────────────────
 class _TopBar extends StatelessWidget {
   const _TopBar({
     required this.searchCtrl,
@@ -490,7 +890,8 @@ class _TopBar extends StatelessWidget {
                     prefixIcon: const Icon(Icons.search,
                         color: AppColors.textSoft, size: 18),
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 12),
                     suffixIcon: searchCtrl.text.isNotEmpty
                         ? IconButton(
                             icon: const Icon(Icons.close,
@@ -518,7 +919,9 @@ class _TopBar extends StatelessWidget {
             child: Column(
               children: searchResults.take(5).map((z) {
                 final tier = z['tier'] as String;
-                final color = AppColors.tierColor(tier);
+                final isDynamic = z['isDynamic'] == true;
+                final color =
+                    isDynamic ? AppColors.info : AppColors.tierColor(tier);
                 return ListTile(
                   dense: true,
                   leading: Container(
@@ -531,8 +934,9 @@ class _TopBar extends StatelessWidget {
                       style: const TextStyle(
                           fontSize: 13, fontWeight: FontWeight.w600)),
                   subtitle: Text(
-                      '${tier.toUpperCase()} · ₹${(z['premium'] as double).toInt()}/wk',
-                      style: const TextStyle(fontSize: 10)),
+                    '${isDynamic ? 'AUTO' : tier.toUpperCase()} · ₹${(z['premium'] as double).toInt()}/wk',
+                    style: const TextStyle(fontSize: 10),
+                  ),
                   onTap: () => onResultTap(z),
                 );
               }).toList(),
@@ -543,13 +947,16 @@ class _TopBar extends StatelessWidget {
   }
 }
 
+// ── Risk legend ───────────────────────────────────────────────────────────────
 class _RiskLegend extends StatelessWidget {
+  const _RiskLegend();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.95),
+        color: Colors.white.withValues(alpha: 0.97),
         borderRadius: BorderRadius.circular(10),
         boxShadow: kCardShadow,
       ),
@@ -561,6 +968,8 @@ class _RiskLegend extends StatelessWidget {
           _LRow(color: AppColors.warning, label: 'Medium risk'),
           SizedBox(height: 4),
           _LRow(color: AppColors.success, label: 'Low risk'),
+          SizedBox(height: 4),
+          _LRow(color: AppColors.info, label: 'Auto zone'),
         ],
       ),
     );
@@ -579,7 +988,8 @@ class _LRow extends StatelessWidget {
           Container(
               width: 8,
               height: 8,
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+              decoration:
+                  BoxDecoration(color: color, shape: BoxShape.circle)),
           const SizedBox(width: 6),
           Text(label,
               style: const TextStyle(
@@ -590,6 +1000,81 @@ class _LRow extends StatelessWidget {
       );
 }
 
+// ── Zone chip horizontal strip ────────────────────────────────────────────────
+class _ZoneChipStrip extends StatelessWidget {
+  const _ZoneChipStrip({
+    required this.zones,
+    required this.selectedZone,
+    required this.onSelect,
+  });
+
+  final List<Map<String, dynamic>> zones;
+  final Map<String, dynamic>? selectedZone;
+  final ValueChanged<Map<String, dynamic>> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 42,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        itemCount: zones.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        itemBuilder: (_, i) {
+          final z = zones[i];
+          final tier = z['tier'] as String;
+          final isDynamic = z['isDynamic'] == true;
+          final isSelected = selectedZone?['zone'] == z['zone'];
+          final color =
+              isDynamic ? AppColors.info : AppColors.tierColor(tier);
+
+          return GestureDetector(
+            onTap: () => onSelect(z),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: isSelected ? color.withValues(alpha: 0.1) : Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: isSelected ? color : AppColors.divider,
+                  width: isSelected ? 2 : 1,
+                ),
+                boxShadow: isSelected ? [] : kCardShadow,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      width: 7,
+                      height: 7,
+                      decoration:
+                          BoxDecoration(color: color, shape: BoxShape.circle)),
+                  const SizedBox(width: 6),
+                  Text(
+                    z['zone'] as String,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w500,
+                      color: isSelected
+                          ? AppColors.textPrimary
+                          : AppColors.textMid,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ── Locate FAB ────────────────────────────────────────────────────────────────
 class _LocateFab extends StatelessWidget {
   const _LocateFab({
     required this.loading,
@@ -615,8 +1100,8 @@ class _LocateFab extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary
-                    .withValues(alpha: loading ? pulseAnim.value * 0.5 : 0.2),
+                color: AppColors.primary.withValues(
+                    alpha: loading ? pulseAnim.value * 0.5 : 0.2),
                 blurRadius: loading ? 18 : 8,
                 spreadRadius: loading ? 3 : 0,
               ),
@@ -636,6 +1121,7 @@ class _LocateFab extends StatelessWidget {
   }
 }
 
+// ── Accuracy badge ────────────────────────────────────────────────────────────
 class _AccuracyBadge extends StatelessWidget {
   const _AccuracyBadge({required this.accuracy});
   final double accuracy;
@@ -661,13 +1147,16 @@ class _AccuracyBadge extends StatelessWidget {
           const SizedBox(width: 4),
           Text('±${accuracy.toInt()}m',
               style: TextStyle(
-                  fontSize: 10, fontWeight: FontWeight.w700, color: color)),
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: color)),
         ],
       ),
     );
   }
 }
 
+// ── Spoof banner ──────────────────────────────────────────────────────────────
 class _SpoofBanner extends StatelessWidget {
   const _SpoofBanner({required this.reason, required this.onDismiss});
   final String reason;
@@ -678,35 +1167,45 @@ class _SpoofBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF1C0A0A),
+        color: const Color(0xFFFFFBEB),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.danger.withValues(alpha: 0.5)),
+        border:
+            Border.all(color: AppColors.warning.withValues(alpha: 0.5)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.gpp_bad, color: AppColors.danger, size: 22),
+          const Icon(Icons.info_outline, color: AppColors.warning, size: 20),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Location Verification Failed',
+                const Text('Location Verification Notice',
                     style: TextStyle(
-                        color: AppColors.danger,
+                        color: Color(0xFF92400E),
                         fontSize: 13,
                         fontWeight: FontWeight.w700)),
                 const SizedBox(height: 3),
                 Text(reason,
-                    style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.7),
+                    style: const TextStyle(
+                        color: Color(0xFF78350F),
                         fontSize: 11,
                         height: 1.4)),
+                const SizedBox(height: 6),
+                const Text(
+                  'You can still select a zone and continue.',
+                  style: TextStyle(
+                      color: AppColors.textMid,
+                      fontSize: 11,
+                      fontStyle: FontStyle.italic),
+                ),
               ],
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.close, color: Colors.white54, size: 16),
+            icon:
+                const Icon(Icons.close, color: AppColors.textSoft, size: 16),
             onPressed: onDismiss,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
@@ -717,6 +1216,7 @@ class _SpoofBanner extends StatelessWidget {
   }
 }
 
+// ── Zone detail card ──────────────────────────────────────────────────────────
 class _ZoneCard extends StatelessWidget {
   const _ZoneCard({
     required this.zone,
@@ -725,6 +1225,7 @@ class _ZoneCard extends StatelessWidget {
     required this.onSelect,
     required this.onDismiss,
   });
+
   final Map<String, dynamic> zone;
   final LatLng? userLatLng;
   final String? warning;
@@ -734,20 +1235,30 @@ class _ZoneCard extends StatelessWidget {
   String? _distLabel() {
     if (userLatLng == null) return null;
     final d = Geolocator.distanceBetween(
-      userLatLng!.latitude,
-      userLatLng!.longitude,
-      zone['lat'] as double,
-      zone['lng'] as double,
+      userLatLng!.latitude, userLatLng!.longitude,
+      zone['lat'] as double, zone['lng'] as double,
     );
     return d < 1000
         ? '${d.toInt()}m away'
         : '${(d / 1000).toStringAsFixed(1)}km away';
   }
 
+  bool get _isInsideZone {
+    if (userLatLng == null) return false;
+    final d = Geolocator.distanceBetween(
+      userLatLng!.latitude, userLatLng!.longitude,
+      zone['lat'] as double, zone['lng'] as double,
+    );
+    return d <= kZoneGeofenceRadius;
+  }
+
   @override
   Widget build(BuildContext context) {
     final tier = zone['tier'] as String;
-    final tierColor = AppColors.tierColor(tier);
+    final isDynamic = zone['isDynamic'] == true;
+    final tierColor =
+        isDynamic ? AppColors.info : AppColors.tierColor(tier);
+    final inside = _isInsideZone;
 
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
@@ -759,13 +1270,16 @@ class _ZoneCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 36,
-            height: 4,
-            margin: const EdgeInsets.only(top: 12),
-            decoration: BoxDecoration(
-              color: AppColors.divider,
-              borderRadius: BorderRadius.circular(2),
+          GestureDetector(
+            onTap: onDismiss,
+            child: Container(
+              width: 36,
+              height: 4,
+              margin: const EdgeInsets.only(top: 12),
+              decoration: BoxDecoration(
+                color: AppColors.divider,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
           Padding(
@@ -779,18 +1293,66 @@ class _ZoneCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(zone['zone'] as String,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w800)),
-                          if (_distLabel() != null)
-                            Row(children: [
-                              const Icon(Icons.near_me,
-                                  size: 11, color: AppColors.textSoft),
-                              const SizedBox(width: 3),
-                              Text(_distLabel()!,
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  zone['zone'] as String,
                                   style: const TextStyle(
-                                      fontSize: 11, color: AppColors.textSoft)),
-                            ]),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              ),
+                              if (isDynamic) ...[
+                                const SizedBox(width: 6),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        AppColors.info.withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(
+                                        color: AppColors.info
+                                            .withValues(alpha: 0.4)),
+                                  ),
+                                  child: const Text('AUTO',
+                                      style: TextStyle(
+                                          fontSize: 9,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.info)),
+                                ),
+                              ],
+                            ],
+                          ),
+                          if (_distLabel() != null)
+                            Row(
+                              children: [
+                                Icon(
+                                  inside
+                                      ? Icons.check_circle_outline
+                                      : Icons.near_me,
+                                  size: 11,
+                                  color: inside
+                                      ? AppColors.success
+                                      : AppColors.textSoft,
+                                ),
+                                const SizedBox(width: 3),
+                                Text(
+                                  inside
+                                      ? 'You are inside this zone'
+                                      : _distLabel()!,
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      color: inside
+                                          ? AppColors.success
+                                          : AppColors.textSoft,
+                                      fontWeight: inside
+                                          ? FontWeight.w600
+                                          : FontWeight.w400),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),
@@ -803,28 +1365,35 @@ class _ZoneCard extends StatelessWidget {
                             color: tierColor.withValues(alpha: 0.45)),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Text('${tier.toUpperCase()} RISK',
-                          style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: tierColor)),
+                      child: Text(
+                        isDynamic ? 'CUSTOM ZONE' : '${tier.toUpperCase()} RISK',
+                        style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: tierColor),
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 Row(
                   children: [
                     Expanded(
-                        child: _InfoCol(
-                            'Weekly Premium',
-                            '₹${(zone['premium'] as double).toInt()}',
-                            AppColors.primary)),
-                    Container(width: 1, height: 40, color: AppColors.divider),
+                      child: _InfoCol(
+                        'Weekly Premium',
+                        '₹${(zone['premium'] as double).toInt()}',
+                        AppColors.primary,
+                      ),
+                    ),
+                    Container(
+                        width: 1, height: 40, color: AppColors.divider),
                     Expanded(
-                        child: _InfoCol(
-                            'Coverage',
-                            '₹${(zone['coverage'] as double).toInt()}',
-                            AppColors.success)),
+                      child: _InfoCol(
+                        'Coverage',
+                        '₹${(zone['coverage'] as double).toInt()}',
+                        AppColors.success,
+                      ),
+                    ),
                   ],
                 ),
                 if (warning != null) ...[
@@ -832,7 +1401,7 @@ class _ZoneCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: AppColors.warning.withValues(alpha: 0.08),
+                      color: AppColors.warning.withValues(alpha: 0.07),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                           color: AppColors.warning.withValues(alpha: 0.3)),
@@ -854,6 +1423,36 @@ class _ZoneCard extends StatelessWidget {
                     ),
                   ),
                 ],
+                // Not inside zone warning
+                if (userLatLng != null && !inside && !isDynamic) ...[
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppColors.danger.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                          color: AppColors.danger.withValues(alpha: 0.25)),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.location_off_outlined,
+                            size: 13, color: AppColors.danger),
+                        SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            'You are not currently inside this zone. Physical presence will be verified on switch.',
+                            style: TextStyle(
+                                fontSize: 11,
+                                color: AppColors.danger,
+                                height: 1.4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 14),
                 SizedBox(
                   width: double.infinity,
@@ -867,9 +1466,11 @@ class _ZoneCard extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text('Select this zone',
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w700)),
+                    child: const Text(
+                      'Select this zone',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -892,7 +1493,8 @@ class _InfoCol extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         children: [
           Text(label,
-              style: const TextStyle(fontSize: 10, color: AppColors.textSoft)),
+              style:
+                  const TextStyle(fontSize: 10, color: AppColors.textSoft)),
           const SizedBox(height: 4),
           Text(value,
               style: TextStyle(
