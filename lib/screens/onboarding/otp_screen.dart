@@ -1,21 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/payout_provider.dart';
 import '../../providers/policy_provider.dart';
 import '../../providers/role_provider.dart';
-import '../../services/backend_url_service.dart';
 import '../../providers/worker_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_theme.dart';
 import '../../utils/auth_utils.dart';
-import '../main/main_shell.dart';
 import '../subscription_payment_screen.dart';
 import 'set_password_screen.dart';
 import 'terms_screen.dart';
@@ -76,101 +71,77 @@ class _OtpScreenState extends State<OtpScreen> {
     setState(() => _verifying = true);
 
     try {
-      // Verify OTP with backend
-      final backendUrl = await BackendUrlService.getBaseUrl();
-      final response = await http.post(
-        Uri.parse('$backendUrl/auth/verify_otp'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'phone': widget.phone,
-          'otp': otp,
-        }),
-      ).timeout(const Duration(seconds: 20));
+      // Dummy OTP mode: accept any 6-digit number without backend call.
+      final isSixDigit = RegExp(r'^\d{6}$').hasMatch(otp);
+      if (!isSixDigit) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Enter any 6-digit OTP')),
+        );
+        return;
+      }
+
+      await context.read<RoleProvider>().setRole(widget.role);
+      await AuthUtils.markLoggedIn();
+
+      final userId = AuthUtils.userIdFromPhone(phone: widget.phone, role: widget.role);
+      final isFirstLogin = await AuthUtils.isFirstLogin(userId);
 
       if (!mounted) return;
 
-      if (response.statusCode == 200) {
-        await context.read<RoleProvider>().setRole(widget.role);
-        await AuthUtils.markLoggedIn();
+      if (isFirstLogin) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          CupertinoPageRoute<void>(
+            builder: (_) => SetPasswordScreen(role: widget.role, phone: widget.phone),
+          ),
+          (route) => false,
+        );
+        return;
+      }
 
-        final userId = AuthUtils.userIdFromPhone(phone: widget.phone, role: widget.role);
-        final isFirstLogin = await AuthUtils.isFirstLogin(userId);
+      if (widget.role == AppRole.worker) {
+        final workerProvider = context.read<WorkerProvider>();
+        await workerProvider.init();
+        final worker = workerProvider.worker;
 
         if (!mounted) return;
 
-        if (isFirstLogin) {
+        if (worker == null || worker.phone != widget.phone) {
           Navigator.pushAndRemoveUntil(
             context,
             CupertinoPageRoute<void>(
-              builder: (_) => SetPasswordScreen(role: widget.role, phone: widget.phone),
+              builder: (_) => TermsScreen(phone: widget.phone),
             ),
             (route) => false,
           );
           return;
         }
 
-        if (widget.role == AppRole.worker) {
-          final workerProvider = context.read<WorkerProvider>();
-          await workerProvider.init();
-          final worker = workerProvider.worker;
+        final policyProvider = context.read<PolicyProvider>();
+        await policyProvider.loadPolicy(worker.id);
 
-          if (!mounted) return;
-
-          if (worker == null) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              CupertinoPageRoute<void>(
-                builder: (_) => TermsScreen(phone: widget.phone),
-              ),
-              (route) => false,
-            );
-            return;
-          }
-
-          final policyProvider = context.read<PolicyProvider>();
-          await policyProvider.loadPolicy(worker.id);
-
-          if (!mounted) return;
-
-          if (policyProvider.activePolicy == null) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              CupertinoPageRoute<void>(
-                builder: (_) => const SubscriptionPaymentScreen(
-                  tier: 'Standard',
-                  premium: 120.0,
-                ),
-              ),
-              (route) => false,
-            );
-            return;
-          }
-
-          context.read<PayoutProvider>().init();
-          Navigator.pushAndRemoveUntil(
-            context,
-            CupertinoPageRoute<void>(builder: (_) => const MainShell()),
-            (route) => false,
-          );
-          return;
-        }
+        if (!mounted) return;
 
         Navigator.pushAndRemoveUntil(
           context,
           CupertinoPageRoute<void>(
-            builder: (_) => TermsScreen(phone: widget.phone),
+            builder: (_) => SubscriptionPaymentScreen(
+              tier: policyProvider.activePolicy?.tier.name ?? 'Standard',
+              premium: policyProvider.activePolicy?.weeklyPremium ?? 120.0,
+              hasValidSubscription: policyProvider.activePolicy != null,
+            ),
           ),
           (route) => false,
         );
-      } else {
-        final error = jsonDecode(response.body)['detail'] ?? 'Failed to verify OTP';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)),
-        );
+        return;
       }
-    } on TimeoutException {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Request timed out. Please check backend/network and try again.')),
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        CupertinoPageRoute<void>(
+          builder: (_) => TermsScreen(phone: widget.phone),
+        ),
+        (route) => false,
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -3,12 +3,9 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 import '../../providers/role_provider.dart';
-import '../../services/backend_url_service.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/gigshield_logo.dart';
@@ -47,45 +44,22 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _loading = true);
 
     try {
-      // Call backend to send OTP
-      final backendUrl = await BackendUrlService.getBaseUrl();
-      final response = await http.post(
-        Uri.parse('$backendUrl/auth/send_otp'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'phone': _phone}),
-      ).timeout(const Duration(seconds: 20));
+      // Dummy OTP mode: no backend call required.
+      final prefs = await SharedPreferences.getInstance();
+      final isReturning = prefs.getString('worker_json') != null;
 
       if (!mounted) return;
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-        final debugOtp = data['debug_otp']?.toString();
-
-        final prefs = await SharedPreferences.getInstance();
-        final isReturning = prefs.getString('worker_json') != null;
-
-        if (mounted) {
-          Navigator.push(
-            context,
-            CupertinoPageRoute<void>(
-              builder: (_) => OtpScreen(
-                phone: _phone,
-                role: _role!,
-                isReturningUser: isReturning,
-                debugOtp: debugOtp,
-              ),
-            ),
-          );
-        }
-      } else {
-        final error = jsonDecode(response.body)['detail'] ?? 'Failed to send OTP';
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)),
-        );
-      }
-    } on TimeoutException {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Request timed out. Please check backend/network and try again.')),
+      Navigator.push(
+        context,
+        CupertinoPageRoute<void>(
+          builder: (_) => OtpScreen(
+            phone: _phone,
+            role: _role!,
+            isReturningUser: isReturning,
+            debugOtp: 'Any 6 digits',
+          ),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

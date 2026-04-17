@@ -48,6 +48,8 @@ class PolicyProvider extends ChangeNotifier {
       coveredEvents: const ['Rain', 'Heat', 'AQI', 'Cyclone', 'Flash Flood'],
     );
 
+    await _savePolicy(worker.id);
+
     _loading = false;
     notifyListeners();
     return true;

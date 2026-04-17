@@ -13,7 +13,7 @@ import '../../providers/weather_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_theme.dart';
 import '../../services/risk_engine.dart';
-import '../main/main_shell.dart';
+import '../subscription_payment_screen.dart';
 
 class RiskRevealScreen extends StatefulWidget {
   const RiskRevealScreen({super.key, required this.worker});
@@ -36,7 +36,6 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
       case RiskTier.low:
         return const Color(0xFF081F10);
       case RiskTier.medium:
-      default:
         return AppColors.darkBg;
     }
   }
@@ -59,23 +58,32 @@ class _RiskRevealScreenState extends State<RiskRevealScreen> {
   Future<void> _activate() async {
     setState(() => _activating = true);
     final weatherProvider = context.read<WeatherProvider>();
+    final payoutProvider = context.read<PayoutProvider>();
     final rainTrigger = weatherProvider.triggers.where((t) => t.type == TriggerType.rain).cast<TriggerEvent?>().firstWhere(
           (t) => t != null,
           orElse: () => null,
         );
-    await context.read<PolicyProvider>().purchase(
+    final policyProvider = context.read<PolicyProvider>();
+    await policyProvider.purchase(
           widget.worker,
-          payoutHistory: context.read<PayoutProvider>().history,
+          payoutHistory: payoutProvider.history,
           currentRainPercent: rainTrigger?.percent ?? 0.5,
         );
-    context.read<PayoutProvider>().init();
+    payoutProvider.init();
     await weatherProvider.fetch(widget.worker.fullZone);
     if (!mounted) {
       return;
     }
     Navigator.pushAndRemoveUntil(
       context,
-      CupertinoPageRoute<void>(builder: (_) => const MainShell()),
+      CupertinoPageRoute<void>(
+        builder: (_) => SubscriptionPaymentScreen(
+          tier: policyProvider.policy?.tier.name ?? widget.worker.tier.name,
+          premium: policyProvider.policy?.weeklyPremium ??
+              RiskEngine.getPremium(widget.worker.tier, city: widget.worker.city),
+          hasValidSubscription: false,
+        ),
+      ),
       (_) => false,
     );
   }
