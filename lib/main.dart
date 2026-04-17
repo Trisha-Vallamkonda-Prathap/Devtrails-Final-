@@ -9,16 +9,11 @@ import 'providers/worker_provider.dart';
 import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
 
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';  // VERY IMPORTANT
+// ❌ REMOVED Firebase imports
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  print("🔥 Firebase initialized"); // keep this for now
   runApp(const MyApp());
 }
 

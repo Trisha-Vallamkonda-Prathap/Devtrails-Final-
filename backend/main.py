@@ -2,7 +2,12 @@ import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routes import weather, risk, policy, payout, risk_ml
+from routes import weather, risk, policy, payout
+
+from dotenv import load_dotenv
+load_dotenv()
+
+from routes import email_otp
 
 app = FastAPI(
     title="GigShield API",
@@ -20,9 +25,9 @@ app.add_middleware(
 
 app.include_router(weather.router, prefix="/weather", tags=["Weather"])
 app.include_router(risk.router, prefix="/risk", tags=["Risk"])
-app.include_router(risk_ml.router, prefix="/risk", tags=["Risk ML"])
 app.include_router(policy.router, prefix="/policy", tags=["Policy"])
 app.include_router(payout.router, prefix="/payout", tags=["Payout"])
+app.include_router(email_otp.router, prefix="/otp", tags=["OTP"])
 
 @app.get("/")
 async def root():

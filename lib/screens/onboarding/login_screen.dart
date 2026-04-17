@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../../services/otp_service.dart';
+import '../../services/email_otp_service.dart'; // ✅ CHANGED
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -20,17 +20,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String _phone = '';
+  String _email = ''; // ✅ CHANGED
   bool _loading = false;
   AppRole? _role;
 
-  bool get _hasValidPhone => RegExp(r'^\d{10}$').hasMatch(_phone);
-  bool get _canContinue => _hasValidPhone && _role != null;
+  bool get _hasValidEmail => RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(_email); // ✅ CHANGED
+  bool get _canContinue => _hasValidEmail && _role != null;
 
   void _showValidationMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Enter a valid 10-digit phone number and choose Worker or Insurer.'),
+        content: Text('Enter a valid email and choose Worker or Insurer.'), // ✅ CHANGED
       ),
     );
   }
@@ -46,34 +46,28 @@ Future<void> _sendOtp() async {
   final prefs = await SharedPreferences.getInstance();
   final isReturning = prefs.getString('worker_json') != null;
 
-  await OtpService.sendOtp(
-    phone: _phone,
-    onSuccess: () {
-      if (!mounted) return;
+  final success = await EmailOtpService.sendOtp(_email); // ✅ CHANGED
 
-      setState(() => _loading = false);
+  if (!mounted) return;
 
-      Navigator.push(
-        context,
-        CupertinoPageRoute<void>(
-          builder: (_) => OtpScreen(
-            phone: _phone,
-            role: _role!,
-            isReturningUser: isReturning,
-          ),
+  setState(() => _loading = false);
+
+  if (success) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute<void>(
+        builder: (_) => OtpScreen(
+          email: _email, // ✅ CHANGED
+          role: _role!,
+          isReturningUser: isReturning,
         ),
-      );
-    },
-    onError: (msg) {
-      if (!mounted) return;
-
-      setState(() => _loading = false);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(msg)),
-      );
-    },
-  );
+      ),
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Failed to send OTP")),
+    );
+  }
 }
 
   @override
@@ -114,7 +108,7 @@ Future<void> _sendOtp() async {
                           ),
                           const SizedBox(height: 4),
                           const Text(
-                            'Welcome!\nEnter your mobile number',
+                            'Welcome!\nEnter your email', // ✅ CHANGED
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
@@ -148,7 +142,7 @@ Future<void> _sendOtp() async {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              '📱 MOBILE NUMBER',
+                              '📧 EMAIL', // ✅ CHANGED
                               style: TextStyle(
                                 color: AppColors.textSoft,
                                 fontSize: 12,
@@ -156,48 +150,19 @@ Future<void> _sendOtp() async {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 50,
-                                  height: 52,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.tealLight,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: const Text(
-                                    '+91',
-                                    style: TextStyle(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+
+                            // ✅ SIMPLIFIED INPUT (kept structure)
+                            TextField(
+                              keyboardType: TextInputType.emailAddress,
+                              onChanged: (value) => setState(() => _email = value),
+                              decoration: InputDecoration(
+                                hintText: 'Enter email',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: TextField(
-                                    maxLength: 10,
-                                    keyboardType: TextInputType.phone,
-                                    buildCounter: (
-                                      BuildContext _, {
-                                      required int currentLength,
-                                      required bool isFocused,
-                                      required int? maxLength,
-                                    }) {
-                                      return null;
-                                    },
-                                    onChanged: (value) => setState(() => _phone = value),
-                                    decoration: InputDecoration(
-                                      hintText: '10-digit number',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
+
                             const SizedBox(height: 24),
                             const Text(
                               'ACCOUNT ROLE',

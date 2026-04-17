@@ -54,8 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!isLoggedIn) {
       Navigator.pushReplacement(
         context,
-        CupertinoPageRoute<void>(builder: (_) => const LoginScreen()),
-      );
+MaterialPageRoute(builder: (_) => const LoginScreen()),      );
       return;
     }
 

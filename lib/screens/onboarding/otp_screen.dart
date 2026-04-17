@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
-import '../../services/otp_service.dart';
+import '../../services/email_otp_service.dart'; // ✅ CHANGED
 import '../../providers/payout_provider.dart';
 import '../../providers/role_provider.dart';
 import '../../providers/worker_provider.dart';
@@ -19,12 +19,12 @@ import 'terms_screen.dart';
 class OtpScreen extends StatefulWidget {
   const OtpScreen({
     super.key,
-    required this.phone,
+    required this.email, // ✅ CHANGED
     required this.role,
     this.isReturningUser = false,
   });
 
-  final String phone;
+  final String email; // ✅ CHANGED
   final AppRole role;
   final bool isReturningUser;
 
@@ -61,7 +61,7 @@ class _OtpScreenState extends State<OtpScreen> {
 Future<void> _verify() async {
   setState(() => _verifying = true);
 
-  final success = await OtpService.verifyOtp(_otp);
+  final success = await EmailOtpService.verifyOtp(widget.email, _otp); // ✅ CHANGED
 
   if (!mounted) return;
 
@@ -77,10 +77,7 @@ Future<void> _verify() async {
   await context.read<RoleProvider>().setRole(widget.role);
   await AuthUtils.markLoggedIn();
 
-  final userId = AuthUtils.userIdFromPhone(
-    phone: widget.phone,
-    role: widget.role,
-  );
+  final userId = widget.email; // ✅ SIMPLIFIED (no phone logic)
 
   final isFirstLogin = await AuthUtils.isFirstLogin(userId);
 
@@ -91,7 +88,7 @@ if (isFirstLogin) {
     context,
     MaterialPageRoute(
       builder: (_) => SetPasswordScreen(
-        phone: widget.phone,
+        phone: widget.email, // ⚠️ kept same param to avoid breaking
         role: widget.role,
       ),
     ),
@@ -144,7 +141,7 @@ if (isFirstLogin) {
                             icon: const Icon(Icons.arrow_back, color: Colors.white),
                           ),
                           const Text(
-                            'Verify your number',
+                            'Verify your email', // ✅ UPDATED TEXT
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 24,
@@ -152,7 +149,9 @@ if (isFirstLogin) {
                             ),
                           ),
                           Text(
-                            widget.isReturningUser ? 'Welcome back! Verify to continue.' : 'OTP sent to +91 ${widget.phone}',
+                            widget.isReturningUser 
+                              ? 'Welcome back! Verify to continue.' 
+                              : 'OTP sent to ${widget.email}', // ✅ CHANGED
                             style: TextStyle(
                               color: Colors.white.withValues(alpha: 0.75),
                               fontSize: 14,
