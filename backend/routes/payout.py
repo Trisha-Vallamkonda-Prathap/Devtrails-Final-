@@ -9,6 +9,11 @@ router = APIRouter()
 class PayoutActionRequest(BaseModel):
     payout_id: str
     worker_id: str
+    account_number: str = ""
+    ifsc: str = ""
+    name: str = ""
+    contact: str = ""
+    email: str = ""
 
 class TriggerPayoutRequest(BaseModel):
     worker_id: str
@@ -71,14 +76,53 @@ async def trigger_payout(request: TriggerPayoutRequest):
 
 @router.post("/accept")
 async def accept_payout(request: PayoutActionRequest):
-    """Simulates accepting a payout and returns a success response."""
+    """Accepts a payout and initiates transfer if bank details provided."""
     await asyncio.sleep(1.2)  # Simulate processing time
-    return {
-        "status": "accepted",
-        "transaction_id": f"GS-{random.randint(1000000, 9999999)}",
-        "upi_ref": f"UPI{random.randint(100000000, 999999999)}",
-        "settled_at": datetime.datetime.now().isoformat()
-    }
+    
+    if request.account_number and request.ifsc:
+        # Use Razorpay for real payout
+        from .payment import client
+        try:
+            payout_data = {
+                "account_number": request.account_number,
+                "fund_account": {
+                    "account_type": "bank_account",
+                    "bank_account": {
+                        "name": request.name,
+                        "ifsc": request.ifsc,
+                        "account_number": request.account_number
+                    },
+                    "contact": {
+                        "name": request.name,
+                        "contact": request.contact,
+                        "email": request.email
+                    }
+                },
+                "amount": 10000,  # Example amount in paisa, should be from payout
+                "currency": "INR",
+                "mode": "IMPS",
+                "purpose": "payout",
+                "queue_if_low_balance": True,
+                "reference_id": f"payout_{request.worker_id}",
+                "narration": "GigShield Payout"
+            }
+            payout = client.payout.create(data=payout_data)
+            return {
+                "status": "accepted",
+                "transaction_id": payout['id'],
+                "razorpay_payout_id": payout['id'],
+                "settled_at": datetime.datetime.now().isoformat()
+            }
+        except Exception as e:
+            return {"status": "failed", "error": str(e)}
+    else:
+        # Mock response
+        return {
+            "status": "accepted",
+            "transaction_id": f"GS-{random.randint(1000000, 9999999)}",
+            "upi_ref": f"UPI{random.randint(100000000, 999999999)}",
+            "settled_at": datetime.datetime.now().isoformat()
+        }
 
 @router.post("/decline")
 async def decline_payout(request: PayoutActionRequest):

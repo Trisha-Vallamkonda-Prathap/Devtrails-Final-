@@ -27,7 +27,8 @@ class Policy {
   final DateTime endDate;
   final List<String> coveredEvents;
 
-  bool get isActive => status == PolicyStatus.active;
+  bool get isActive =>
+      status == PolicyStatus.active && endDate.isAfter(DateTime.now());
 
   String get renewalDate => DateFormat('EEE, d MMM').format(endDate);
 

@@ -14,7 +14,9 @@ import 'city_picker_screen.dart';
 import 'risk_reveal_screen.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
-  const ProfileSetupScreen({super.key});
+  const ProfileSetupScreen({super.key, required this.phone});
+
+  final String phone;
 
   @override
   State<ProfileSetupScreen> createState() => _ProfileSetupScreenState();
@@ -45,7 +47,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     final worker = Worker(
       id: 'W-${DateTime.now().millisecondsSinceEpoch}',
       name: _name.trim(),
-      phone: '9999999999',
+      phone: widget.phone,
       platform: _platform!,
       zone: zone,
       city: city,

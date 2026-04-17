@@ -6,7 +6,9 @@ import '../../theme/app_theme.dart';
 import 'profile_setup_screen.dart';
 
 class TermsScreen extends StatefulWidget {
-  const TermsScreen({super.key});
+  const TermsScreen({super.key, this.phone});
+
+  final String? phone;
 
   @override
   State<TermsScreen> createState() => _TermsScreenState();
@@ -36,9 +38,17 @@ class _TermsScreenState extends State<TermsScreen> {
   }
 
   void _accept() {
+    final phone = widget.phone;
+    if (phone == null || phone.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Phone number missing. Please login again.')),
+      );
+      return;
+    }
+
     Navigator.push(
       context,
-      CupertinoPageRoute<void>(builder: (_) => const ProfileSetupScreen()),
+      CupertinoPageRoute<void>(builder: (_) => ProfileSetupScreen(phone: phone)),
     );
   }
 
