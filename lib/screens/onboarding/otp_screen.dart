@@ -86,8 +86,33 @@ Future<void> _verify() async {
 
   if (!mounted) return;
 
-  // KEEP YOUR EXISTING NAVIGATION LOGIC BELOW
-}
+if (isFirstLogin) {
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (_) => SetPasswordScreen(
+        phone: widget.phone,
+        role: widget.role,
+      ),
+    ),
+  );
+} else {
+  if (widget.role == AppRole.insurer) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const InsuranceDashboardScreen(),
+      ),
+    );
+  } else {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const MainShell(),
+      ),
+    );
+  }
+}}
 
   @override
   void dispose() {

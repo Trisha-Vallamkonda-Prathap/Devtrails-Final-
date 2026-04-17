@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "341482426720",
+    "project_id": "devtrails-8fce6",
+    "storage_bucket": "devtrails-8fce6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341482426720:android:352d5c5040aca6e0118e05",
+        "android_client_info": {
+          "package_name": "com.example.gigshield"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDfC5KeFM0eIrfGxWsE0CSE5mdwGMmQ8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
